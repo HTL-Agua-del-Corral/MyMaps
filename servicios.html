@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#1A2B3C">
-    <title>Servicios & Info - Hotel Agua del Corral</title>
+    <title>Hotel Agua del Corral - Mendoza</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin>
+    <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- PapaParse: lectura del CSV del Google Sheet -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <style>
         :root {
@@ -17,7 +24,7 @@
             --accent-gold: #C5A059;
             --bg-light: #F8F9FA;
             --text-main: #2D3748;
-            --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.15);
             --safe-top: env(safe-area-inset-top, 0px);
             --safe-bottom: env(safe-area-inset-bottom, 0px);
             --safe-left: env(safe-area-inset-left, 0px);
@@ -26,31 +33,33 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html, body { height: 100%; }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-light);
             color: var(--text-main);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            min-height: 100dvh;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
             -webkit-text-size-adjust: 100%;
         }
 
-        /* ---------- Encabezado idéntico ---------- */
         header {
             background: linear-gradient(135deg, #111E2B 0%, var(--primary-dark) 100%);
             color: #FFF;
-            padding: calc(12px + var(--safe-top)) calc(16px + var(--safe-right)) 12px calc(16px + var(--safe-left));
+            padding: calc(10px + var(--safe-top)) calc(16px + var(--safe-right)) 10px calc(16px + var(--safe-left));
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,.15);
-            z-index: 1000;
+            z-index: 3000; /* Prioridad alta para el header */
             border-bottom: 2px solid var(--accent-gold);
-            position: sticky;
-            top: 0;
+            flex: 0 0 auto;
+            position: relative;
         }
         .brand-title {
             font-family: 'Playfair Display', serif;
@@ -68,11 +77,18 @@
             margin-top: 2px;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .lang-switch {
             display: flex;
             background: rgba(255,255,255,.1);
             border-radius: 999px;
             padding: 3px;
+            flex: 0 0 auto;
         }
         .lang-btn {
             border: none;
@@ -82,132 +98,259 @@
             padding: 7px 11px;
             border-radius: 999px;
             cursor: pointer;
+            min-height: 32px;
         }
         .lang-btn.active { background: var(--accent-gold); color: #1A1A1A; }
 
-        /* ---------- Contenido Principal ---------- */
-        .container {
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 24px calc(16px + var(--safe-right)) calc(40px + var(--safe-bottom)) calc(16px + var(--safe-left));
-            flex: 1;
+        /* ---------- Menú Hamburguesa ---------- */
+        .menu-wrap {
+            position: relative;
+            z-index: 4000;
         }
+        .menu-toggle {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,.2);
+            color: #FFF;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background .2s;
+        }
+        .menu-toggle:hover { background: rgba(255,255,255,.2); }
 
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary-dark);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: .88rem;
-            margin-bottom: 20px;
-        }
-        .nav-back:hover { color: var(--accent-gold); }
-
-        .page-heading {
-            margin-bottom: 24px;
-        }
-        .page-heading h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.6rem, 5vw, 2.2rem);
-            color: var(--primary-dark);
-            margin-bottom: 6px;
-        }
-        .page-heading p {
-            color: #718096;
-            font-size: .95rem;
-        }
-
-        /* ---------- Tarjetas de Sección ---------- */
-        .card-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .section-card {
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
             background: #FFF;
-            border-radius: 16px;
-            padding: 22px;
-            box-shadow: var(--shadow-card);
-            border-left: 4px solid var(--accent-gold);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            width: 220px;
+            padding: 8px;
+            display: none;
+            z-index: 9999; /* Z-index ultra alto para que flote por encima de todo */
+            animation: fadeIn .15s ease-out;
         }
+        .dropdown-menu.open { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
-        .section-card h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
-            color: var(--primary-dark);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .menu-item {
+            display: flex; align-items: center; gap: 10px;
+            width: 100%;
+            padding: 11px 14px;
+            border: none; background: transparent;
+            text-align: left;
+            cursor: pointer;
+            font: 500 .9rem 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background .15s, color .15s;
         }
-        .section-card h2 i {
+        .menu-item i {
             color: var(--accent-gold);
-            font-size: 1.1rem;
+            width: 18px;
+            text-align: center;
         }
-
-        .info-list {
-            list-style: none;
-            display: grid;
-            gap: 10px;
-        }
-        .info-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: .92rem;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #EDF2F7;
-        }
-        .info-list li:last-child { border-bottom: none; padding-bottom: 0; }
-        .info-list span:first-child { color: #4A5568; font-weight: 500; }
-        .info-list span:last-child { color: var(--primary-dark); font-weight: 600; text-align: right; }
-
-        .desc-text {
-            font-size: .92rem;
-            color: #4A5568;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        /* Botones de acción rápida en tarjetas */
-        .card-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 14px;
-        }
-        .btn-action {
-            flex: 1;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+        .menu-item:hover {
             background: #F7FAFC;
             color: var(--primary-dark);
-            border: 1px solid #E2E8F0;
-            padding: 10px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: .85rem;
-            font-weight: 600;
-            transition: all .2s;
-        }
-        .btn-action:hover {
-            background: var(--primary-dark);
-            color: #FFF;
-            border-color: var(--primary-dark);
         }
 
-        /* Footer sutil */
-        footer {
-            text-align: center;
-            padding: 20px;
-            font-size: .8rem;
-            color: #A0AEC0;
-            border-top: 1px solid #E2E8F0;
+        /* ---------- Barra de herramientas: buscador + categorías ---------- */
+        .toolbar {
+            background: #FFF;
+            padding: 10px calc(14px + var(--safe-right)) 10px calc(14px + var(--safe-left));
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.06);
+            position: relative;
+            z-index: 1100;
+            flex: 0 0 auto;
         }
+
+        .search-wrap { position: relative; flex: 1 1 240px; min-width: 0; }
+        .search-wrap > i {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            color: #718096; font-size: .9rem; pointer-events: none;
+        }
+        #search {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #E2E8F0;
+            background: #F7FAFC;
+            border-radius: 21px;
+            padding: 0 14px 0 38px;
+            font: 400 16px 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            outline: none;
+        }
+        #search:focus { border-color: var(--accent-gold); background: #FFF; box-shadow: 0 0 0 3px rgba(197,160,89,.2); }
+
+        #results {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0; right: 0;
+            background: #FFF;
+            border-radius: 12px;
+            box-shadow: var(--shadow-card);
+            max-height: min(45vh, 320px);
+            overflow-y: auto;
+            display: none;
+            z-index: 1300;
+        }
+        #results.open { display: block; }
+        .result-item {
+            display: flex; align-items: center; gap: 10px;
+            width: 100%;
+            padding: 10px 12px;
+            border: none; background: transparent;
+            text-align: left;
+            cursor: pointer;
+            font: 500 .9rem 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            border-bottom: 1px solid #EDF2F7;
+        }
+        .result-item:last-child { border-bottom: none; }
+        .result-item:hover, .result-item:focus { background: #F7FAFC; outline: none; }
+        .result-dot {
+            flex: 0 0 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #FFF; font-size: .75rem;
+        }
+        .result-text small { display: block; color: #718096; font-weight: 400; font-size: .75rem; }
+        .no-results { padding: 14px; color: #718096; font-size: .88rem; }
+
+        .cat-wrap { position: relative; flex: 1 1 200px; min-width: 0; }
+        .cat-wrap > i { position: absolute; top: 50%; transform: translateY(-50%); color: #718096; font-size: .85rem; pointer-events: none; }
+        .cat-wrap > i:first-child { left: 14px; }
+        .cat-wrap > .caret { right: 14px; font-size: .75rem; }
+        #cat-select {
+            width: 100%; height: 42px;
+            border: 1px solid #E2E8F0; background: #F7FAFC;
+            border-radius: 21px;
+            padding: 0 36px 0 38px;
+            font: 500 16px 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            appearance: none; -webkit-appearance: none;
+            outline: none; cursor: pointer;
+            text-overflow: ellipsis;
+        }
+        #cat-select:focus { border-color: var(--accent-gold); background: #FFF; box-shadow: 0 0 0 3px rgba(197,160,89,.2); }
+
+        #map-container { flex: 1 1 auto; min-height: 0; width: 100%; position: relative; }
+        #map { width: 100%; height: 100%; background: #E8EEF2; }
+
+        .leaflet-bottom.leaflet-right .leaflet-control-zoom { margin-bottom: calc(26px + var(--safe-bottom)); margin-right: calc(10px + var(--safe-right)); }
+        .leaflet-bottom.leaflet-right .leaflet-control-attribution { margin-bottom: var(--safe-bottom); }
+        .leaflet-control-zoom a { width: 38px !important; height: 38px !important; line-height: 38px !important; }
+
+        .fabs {
+            position: absolute;
+            right: calc(10px + var(--safe-right));
+            bottom: calc(138px + var(--safe-bottom));
+            display: flex; flex-direction: column; gap: 8px;
+            z-index: 900;
+        }
+        .fab {
+            width: 44px; height: 44px;
+            border: none; border-radius: 50%;
+            background: #FFF; color: var(--primary-dark);
+            box-shadow: 0 3px 10px rgba(0,0,0,.25);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.05rem;
+        }
+        .fab:hover { background: #F1F5F9; }
+        .fab.on { background: var(--accent-gold); color: #FFF; }
+
+        #layer-panel {
+            position: absolute;
+            right: calc(64px + var(--safe-right));
+            bottom: calc(138px + var(--safe-bottom));
+            background: #FFF; border-radius: 12px; box-shadow: var(--shadow-card);
+            padding: 6px; z-index: 920; display: none;
+            min-width: 190px; max-width: calc(100vw - 90px);
+        }
+        #layer-panel.open { display: block; }
+        .lp-title { font-weight: 600; font-size: .7rem; text-transform: uppercase; letter-spacing: 1px; color: #718096; padding: 6px 10px; }
+        .lp-item {
+            display: flex; align-items: center; gap: 8px; width: 100%;
+            border: none; background: transparent; padding: 10px; min-height: 40px;
+            border-radius: 8px; font: 500 .88rem 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main); cursor: pointer; text-align: left;
+        }
+        .lp-item:hover { background: #F7FAFC; }
+        .lp-item.active { background: #FBF5E8; color: var(--primary-dark); font-weight: 600; }
+        .lp-item i { width: 16px; color: var(--accent-gold); visibility: hidden; }
+        .lp-item.active i { visibility: visible; }
+
+        #status {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+            background: rgba(248,249,250,.95);
+            z-index: 950;
+            font-size: .95rem; color: var(--primary-dark);
+            text-align: center; padding: 20px;
+        }
+        #status.hidden { display: none; }
+        .spinner {
+            width: 34px; height: 34px;
+            border: 4px solid #CBD5E0; border-top-color: var(--accent-gold);
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #toast {
+            position: absolute;
+            left: 50%; bottom: calc(18px + var(--safe-bottom));
+            transform: translateX(-50%);
+            background: rgba(26,43,60,.95); color: #FFF;
+            padding: 10px 16px; border-radius: 10px;
+            font-size: .85rem; max-width: min(90vw, 420px); text-align: center;
+            z-index: 960; display: none;
+            box-shadow: var(--shadow-card);
+        }
+        #toast.show { display: block; }
+
+        .leaflet-popup-content-wrapper { border-radius: 12px; padding: 4px; box-shadow: var(--shadow-card); font-family: 'Plus Jakarta Sans', sans-serif; }
+        .leaflet-popup-content { margin: 12px 14px; width: min(250px, 66vw) !important; }
+        .popup-card h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--primary-dark); margin-bottom: 4px; }
+        .popup-cat { display: inline-block; font-size: .68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-gold); font-weight: 600; margin-bottom: 6px; }
+        .popup-desc { font-size: .85rem; color: #4A5568; margin-bottom: 10px; line-height: 1.45; overflow-wrap: anywhere; }
+        .popup-meta { font-size: .8rem; color: #2D3748; margin-bottom: 4px; display: flex; gap: 7px; align-items: baseline; }
+        .popup-meta i { color: var(--accent-gold); width: 14px; text-align: center; }
+        .popup-meta:last-of-type { margin-bottom: 12px; }
+        .btn-navigate {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #A37F38 100%);
+            color: #FFF !important;
+            padding: 11px 0; border-radius: 8px;
+            text-decoration: none; font-size: .85rem; font-weight: 600;
+            box-shadow: 0 3px 8px rgba(197,160,89,.3);
+        }
+
+        .custom-pin-wrapper { background: none; border: none; }
+        .custom-pin {
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 50%; color: #FFF;
+            box-shadow: 0 3px 8px rgba(0,0,0,.35);
+            border: 2px solid #FFF;
+            width: 100%; height: 100%;
+        }
+        .hotel-pin { position: relative; border: 3px solid var(--accent-gold); box-shadow: 0 4px 14px rgba(0,0,0,.45); }
+        .hotel-pin::after {
+            content: ''; position: absolute; inset: -8px; border-radius: 50%;
+            border: 2px solid var(--accent-gold); opacity: 0;
+            animation: pulse 2.2s ease-out infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(.7); opacity: .9; } 100% { transform: scale(1.4); opacity: 0; } }
+        .me-pin { width: 18px; height: 18px; background: #2B6CB0; border: 3px solid #FFF; border-radius: 50%; box-shadow: 0 0 0 2px rgba(43,108,176,.4), 0 2px 6px rgba(0,0,0,.4); }
     </style>
 </head>
 <body>
@@ -215,89 +358,421 @@
     <header>
         <div>
             <div class="brand-title">Agua del Corral</div>
-            <div class="brand-subtitle">Hotel & Spa • Mendoza</div>
+            <div class="brand-subtitle" data-i18n="subtitle">Hotel & Spa • Mendoza</div>
         </div>
-        <div class="lang-switch" role="group" aria-label="Idioma">
-            <button class="lang-btn active" data-lang="es">ES</button>
-            <button class="lang-btn" data-lang="en">EN</button>
-            <button class="lang-btn" data-lang="pt">PT</button>
+        <div class="header-right">
+            <div class="lang-switch" role="group">
+                <button class="lang-btn" data-lang="es">ES</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="pt">PT</button>
+            </div>
+            
+            <!-- Menú Hamburguesa Desplegable -->
+            <div class="menu-wrap">
+                <button class="menu-toggle" id="menu-btn" aria-label="Menú principal"><i class="fa-solid fa-bars"></i></button>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="servicios.html" class="menu-item"><i class="fa-solid fa-concierge-bell"></i> Servicios</a>
+                    <a href="tel:+5492614000000" class="menu-item"><i class="fa-solid fa-headset"></i> Contacto</a>
+                    <a href="#" class="menu-item" onclick="alert('Sección Blog próximamente'); return false;"><i class="fa-solid fa-book-open"></i> Blog</a>
+                    <a href="https://g.page/r/tu-enlace-de-google-reviews" target="_blank" rel="noopener noreferrer" class="menu-item"><i class="fa-solid fa-star"></i> Dejar reseña</a>
+                </div>
+            </div>
         </div>
     </header>
 
-    <div class="container">
-        <a href="index.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Volver al Mapa Interactivo</a>
-
-        <div class="page-heading">
-            <h1>Guía de Servicios & Info</h1>
-            <p>Todo lo que necesitas saber para disfrutar al máximo tu estadía con nosotros.</p>
+    <div class="toolbar">
+        <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="search" type="search" autocomplete="off" data-i18n-ph="search" placeholder="Buscar lugares…" aria-label="Buscar">
+            <div id="results" role="listbox"></div>
         </div>
-
-        <div class="card-grid">
-            
-            <!-- Horarios y Estancia -->
-            <div class="section-card">
-                <h2><i class="fa-solid fa-clock"></i> Horarios de Estancia</h2>
-                <ul class="info-list">
-                    <li><span>Check-in (Ingreso)</span><span>15:00 hs</span></li>
-                    <li><span>Check-out (Salida)</span><span>12:00 hs</span></li>
-                    <li><span>Desayuno Buffet</span><span>07:00 a 10:00 hs - 9º Piso</span></li>
-                    <li><span>Recepción y Conserjería</span><span>24 Horas</span></li>
-                </ul>
-            </div>
-
-            <!-- Spa & Bienestar -->
-            <div class="section-card">
-                <h2><i class="fa-solid fa-spa"></i> Spa & Bienestar</h2>
-                <p class="desc-text">Relájate en nuestras instalaciones exclusivas. Contamos con sesiones de masajes descontracturantes, relajantes y nuestra revitalizante <strong>ducha escocesa</strong> (consultar turnos disponibles en recepción).</p>
-                <ul class="info-list">
-                    <li><span>Horario del Spa</span><span>12:00 a 21:00 hs</span></li>
-                    <li><span>Reserva previa</span><span>Obligatoria (+54 9 2612 35-3032)</span></li>
-                </ul>
-                <div class="card-actions">
-                    <a href="https://wa.me/5492612353032?text=Hola%2C%20quisiera%20reservar%20turno%20para%20Spa" class="btn-action"><i class="fa-solid fa-phone"></i> Reservar Turno</a>
-                </div>
-            </div>
-
-            <!-- Restaurante & Gastronomía -->
-            <div class="section-card">
-                <h2><i class="fa-solid fa-utensils"></i> Restaurante & Bar</h2>
-                <p class="desc-text">Disfruta de la alta cocina regional y los mejores vinos de Mendoza sin moverte del hotel. Servicio a la carta, picadas regionales y coctelería de autor.</p>
-                <ul class="info-list">
-                    <li><span>Almuerzo / Cena</span><span>12:30 a 21:00 hs</span></li>
-                    <li><span>Room Service</span><span>Disponible hasta las 21:00 hs</span></li>
-                </ul>
-            </div>
-
-            <!-- Contacto Directo -->
-            <div class="section-card">
-                <h2><i class="fa-solid fa-headset"></i> Contacto Directo</h2>
-                <p class="desc-text">¿Necesitas asistencia con tu equipaje, transporte, excursiones a alta montaña o reservas? Comunícate directamente con nuestro equipo.</p>
-                <ul class="info-list">
-                    <li><span>Recepción (Desde la habitación)</span><span>Marcar 2901</span></li>
-                    <li><span>Teléfono Principal</span><span>+54 9 2612 35-2727</span></li>
-                    <li><span>Correo Electrónico</span><span>reservas@supehturismo.com.ar</span></li>
-                </ul>
-                <div class="card-actions">
-                    <a href="+54 9 2612 35-2727" class="btn-action"><i class="fa-solid fa-phone"></i> Llamar a Recepción</a>
-                    <a href="mailto:reservas@supehturismo.com.ar" class="btn-action"><i class="fa-solid fa-envelope"></i> Enviar Email</a>
-                </div>
-            </div>
-
-        </div>
+        <div class="cat-wrap"><i class="fa-solid fa-filter"></i><select id="cat-select" aria-label="Categoría"></select><i class="fa-solid fa-chevron-down caret"></i></div>
     </div>
 
-    <footer>
-        Hotel Agua del Corral &copy; 2026 • Amigorena 36, Mendoza, Argentina
-    </footer>
+    <div id="map-container">
+        <div id="map"></div>
+
+        <div class="fabs">
+            <button class="fab" id="btn-hotel" title="Mi hotel"><i class="fa-solid fa-bed"></i></button>
+            <button class="fab" id="btn-locate" title="Mi ubicación"><i class="fa-solid fa-location-crosshairs"></i></button>
+            <button class="fab" id="btn-layer" title="Tipo de mapa"><i class="fa-solid fa-layer-group"></i></button>
+        </div>
+
+        <div id="layer-panel" role="menu"></div>
+
+        <div id="status">
+            <div class="spinner" id="status-spinner"></div>
+            <div id="status-text">Cargando puntos de interés…</div>
+            <button id="status-btn" class="chip active" style="display:none; margin-top:10px;" onclick="location.reload()">Reintentar</button>
+        </div>
+        <div id="toast" role="status"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Sincronización básica de idioma simulada para la botonera
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+    (function () {
+        'use strict';
+
+        const CONFIG = {
+            hotel: { lat: -32.89163773879844, lng: -68.83910524709069 },
+            sheetCsvUrl: "https://docs.google.com/spreadsheets/d/13xRDP6nPQ8wOObf-a8-gJpn8cN973F4HX8qoZr5Pad0/export?format=csv",
+            cacheKey: 'agc_csv_cache_v2',
+            langKey: 'agc_lang',
+            metersPerMinute: 80,
+            detourFactor: 1.3,
+            maxWalkMeters: 3000
+        };
+
+        const I18N = {
+            es: {
+                subtitle: 'Hotel & Spa • Mendoza', search: 'Buscar lugares…', all: 'Todas las categorías', other: 'Otros',
+                hotel: 'Mi hotel', locate: 'Mi ubicación', satellite: 'Satélite', streets: 'Mapa de calles', terrain: 'Terreno', mapType: 'Tipo de mapa',
+                directions: 'Cómo llegar', fromHotel: 'del hotel', fromYou: 'de tu ubicación', walk: 'a pie',
+                noResults: 'Sin resultados', loading: 'Cargando puntos de interés…',
+                errorLoad: 'No se pudieron cargar los puntos del Google Sheet. Verifica que la planilla sea pública.',
+                offline: 'Sin conexión: mostrando versión guardada.',
+                locDenied: 'Permiso de ubicación denegado.', locUnsupported: 'Geolocalización no soportada.',
+                locating: 'Buscando ubicación…', youAreHere: 'Estás aquí'
+            },
+            en: {
+                subtitle: 'Hotel & Spa • Mendoza', search: 'Search places…', all: 'All categories', other: 'Other',
+                hotel: 'My hotel', locate: 'My location', satellite: 'Satellite', streets: 'Street map', terrain: 'Terrain', mapType: 'Map type',
+                directions: 'Get directions', fromHotel: 'from the hotel', fromYou: 'from your location', walk: 'walk',
+                noResults: 'No results', loading: 'Loading points of interest…',
+                errorLoad: 'Could not load Google Sheet. Verify sheet permissions.',
+                offline: 'Offline: showing cached version.',
+                locDenied: 'Location permission denied.', locUnsupported: 'Geolocation not supported.',
+                locating: 'Locating…', youAreHere: 'You are here'
+            },
+            pt: {
+                subtitle: 'Hotel & Spa • Mendoza', search: 'Buscar lugares…', all: 'Todas as categorias', other: 'Outros',
+                hotel: 'Meu hotel', locate: 'Minha localização', satellite: 'Satélite', streets: 'Mapa de ruas', terrain: 'Relevo', mapType: 'Tipo de mapa',
+                directions: 'Como chegar', fromHotel: 'do hotel', fromYou: 'da sua localização', walk: 'a pé',
+                noResults: 'Sem resultados', loading: 'Carregando pontos de interesse…',
+                errorLoad: 'Não foi possível carregar o Google Sheet.',
+                offline: 'Sem conexão: exibindo versão salva.',
+                locDenied: 'Permissão de localização negada.', locUnsupported: 'Geolocalização não suportada.',
+                locating: 'Localizando…', youAreHere: 'Você está aqui'
+            }
+        };
+
+        let lang = 'es', activeCat = 'all', items = [], userPos = null, userLayer = null;
+        const $ = id => document.getElementById(id);
+        const t = key => (I18N[lang] && I18N[lang][key]) || I18N.es[key] || key;
+
+        function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim(); }
+        function normHeader(h) { return norm(h).replace(/\s+/g, '_'); }
+        function parseCoord(v, min, max) {
+            const n = parseFloat(String(v == null ? '' : v).trim().replace(',', '.'));
+            return (isFinite(n) && n >= min && n <= max) ? n : null;
+        }
+        function safeIcon(v) { v = String(v || '').trim().toLowerCase(); return /^[a-z0-9-]+$/.test(v) ? v : 'location-dot'; }
+        function safeColor(v) {
+            v = String(v || '').trim();
+            return (v && /^[#\w(),.%\s-]+$/.test(v)) ? v : '#2B6CB0';
+        }
+        function haversine(lat1, lng1, lat2, lng2) {
+            const R = 6371000, rad = Math.PI / 180;
+            const dLat = (lat2 - lat1) * rad, dLng = (lng2 - lng1) * rad;
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) ** 2;
+            return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+        function fmtDist(m) {
+            if (m < 1000) return Math.max(10, Math.round(m / 10) * 10) + ' m';
+            return (m / 1000).toFixed(1) + ' km';
+        }
+        function distanceText(m, suffixKey) {
+            let txt = '≈ ' + fmtDist(m);
+            if (m <= CONFIG.maxWalkMeters) {
+                const min = Math.max(1, Math.round(m * CONFIG.detourFactor / CONFIG.metersPerMinute));
+                txt += ' · ~' + min + ' min ' + t('walk');
+            }
+            return txt + ' ' + t(suffixKey);
+        }
+
+        /* Saneador HTML */
+        const ALLOWED_TAGS = new Set(['A','B','STRONG','I','EM','U','BR','P','UL','OL','LI','SPAN','SMALL']);
+        function cleanNode(src, dest) {
+            src.childNodes.forEach(node => {
+                if (node.nodeType === 3) dest.appendChild(document.createTextNode(node.nodeValue));
+                else if (node.nodeType === 1 && ALLOWED_TAGS.has(node.tagName.toUpperCase())) {
+                    const el = document.createElement(node.tagName.toLowerCase());
+                    if (node.tagName.toUpperCase() === 'A') {
+                        el.href = node.getAttribute('href') || '#';
+                        el.target = '_blank'; el.rel = 'noopener noreferrer';
+                    }
+                    cleanNode(node, el);
+                    dest.appendChild(el);
+                }
             });
-        });
+        }
+        function sanitizeToFragment(html) {
+            const frag = document.createDocumentFragment();
+            const doc = new DOMParser().parseFromString('<body>' + String(html || ''), 'text/html');
+            cleanNode(doc.body, frag);
+            return frag;
+        }
+
+        /* Control de Menú Hamburguesa */
+        const menuBtn = $('menu-btn'), dropdownMenu =$('dropdown-menu');
+        menuBtn.onclick = e => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('open');
+            $('layer-panel').classList.remove('open');
+        };
+
+        /* Mapa */
+        const map = L.map('map', { zoomControl: false, tap: true }).setView([CONFIG.hotel.lat, CONFIG.hotel.lng], 16);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        const PROVIDERS = [
+            { id: 'esri', name: 'Esri', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', attr: 'Esri', kind: 'street' },
+            { id: 'osm', name: 'OpenStreetMap', url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', attr: 'OpenStreetMap', kind: 'street' },
+            { id: 'sat', labelKey: 'satellite', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr: 'Esri Satellite', kind: 'sat' }
+        ];
+        const labelOf = i => PROVIDERS[i].labelKey ? t(PROVIDERS[i].labelKey) : PROVIDERS[i].name;
+        const providerLayers = PROVIDERS.map(p => L.tileLayer(p.url, { maxZoom: 19, attribution: p.attr }));
+        let baseIdx = 0;
+        providerLayers[baseIdx].addTo(map);
+
+        const markersLayer = L.layerGroup().addTo(map);
+
+        function renderLayerPanel() {
+            const box = $('layer-panel');
+            if (!box) return;
+            box.innerHTML = '<div class="lp-title">' + t('mapType') + '</div>';
+            PROVIDERS.forEach((p, i) => {
+                const b = document.createElement('button');
+                b.className = 'lp-item' + (i === baseIdx ? ' active' : '');
+                b.innerHTML = '<i class="fa-solid fa-check"></i> ' + labelOf(i);
+                b.onclick = () => {
+                    map.removeLayer(providerLayers[baseIdx]);
+                    baseIdx = i;
+                    providerLayers[baseIdx].addTo(map);
+                    box.classList.remove('open');
+                    renderLayerPanel();
+                };
+                box.appendChild(b);
+            });
+        }
+
+        $('btn-layer').onclick = e => { 
+            e.stopPropagation(); 
+            renderLayerPanel(); 
+            $('layer-panel').classList.toggle('open'); 
+            dropdownMenu.classList.remove('open');
+        };
+        
+        document.onclick = () => {
+            dropdownMenu.classList.remove('open');
+            $('layer-panel').classList.remove('open');
+        };
+
+        /* Carga de Datos con respaldo en caché */
+        async function loadData() {
+            const st = $('status'), sp =$('status-spinner'), txt = $('status-text'), btn =$('status-btn');
+            st.classList.remove('hidden');
+            sp.style.display = 'block';
+            txt.textContent = t('loading');
+            btn.style.display = 'none';
+
+            let csv = null, cached = false;
+            try {
+                const res = await fetch(CONFIG.sheetCsvUrl);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                csv = await res.text();
+                try { localStorage.setItem(CONFIG.cacheKey, csv); } catch(e){}
+            } catch(err) {
+                console.warn('Fetch directo falló, intentando caché local...', err);
+                try {
+                    csv = localStorage.getItem(CONFIG.cacheKey);
+                    if (csv) cached = true;
+                } catch(e){}
+            }
+
+            if (!csv || csv.trim().startsWith('<')) {
+                sp.style.display = 'none';
+                txt.textContent = t('errorLoad');
+                btn.style.display = 'block';
+                return;
+            }
+
+            const parsed = Papa.parse(csv, { header: true, skipEmptyLines: true, transformHeader: normHeader });
+            buildItems(parsed.data);
+            st.classList.add('hidden');
+            if (cached) {
+                const tEl = $('toast');
+                tEl.textContent = t('offline');
+                tEl.classList.add('show');
+                setTimeout(() => tEl.classList.remove('show'), 5000);
+            }
+        }
+
+        function buildItems(rows) {
+            items = [];
+            markersLayer.clearLayers();
+
+            rows.forEach(r => {
+                const lat = parseCoord(r.latitud, -90, 90);
+                const lng = parseCoord(r.longitud, -180, 180);
+                const name = String(r.nombre || '').trim();
+                if (lat === null || lng === null || !name) return;
+
+                const isHotel = String(r.hotel || '').toLowerCase() === 'si' || haversine(lat, lng, CONFIG.hotel.lat, CONFIG.hotel.lng) < 3;
+                const catRaw = String(r.categoria || '').trim();
+
+                const item = {
+                    row: r, lat, lng, isHotel,
+                    icon: safeIcon(r.icono),
+                    color: isHotel ? '#C5A059' : safeColor(r.color),
+                    catKey: norm(catRaw) || '__otros',
+                    hasCatColumn: !!catRaw
+                };
+
+                const size = isHotel ? 46 : 34;
+                const pin = document.createElement('div');
+                pin.className = 'custom-pin' + (isHotel ? ' hotel-pin' : '');
+                pin.style.backgroundColor = isHotel ? '#1A2B3C' : item.color;
+                pin.innerHTML = `<i class="fa-solid fa-${isHotel ? 'bed' : item.icon}" style="font-size: ${isHotel ? '18px' : '14px'}; ${isHotel ? 'color:#C5A059;' : ''}"></i>`;
+
+                item.marker = L.marker([lat, lng], {
+                    icon: L.divIcon({ className: 'custom-pin-wrapper', html: pin, iconSize: [size, size], iconAnchor: [size/2, size/2], popupAnchor: [0, -size/2] }),
+                    zIndexOffset: isHotel ? 1000 : 0
+                }).bindPopup(() => buildPopup(item), { maxWidth: 300 });
+
+                item.search = norm(name + ' ' + (r.descripcion || '') + ' ' + catRaw);
+                items.push(item);
+            });
+
+            renderChips();
+            applyFilter();
+        }
+
+        function buildPopup(item) {
+            const card = document.createElement('div');
+            card.className = 'popup-card';
+            card.innerHTML = `
+                <h4>${item.row.nombre || ''}</h4>
+                <span class="popup-cat">${item.isHotel ? 'Hotel' : (item.row.categoria || 'Lugar')}</span>
+                <div class="popup-desc"></div>
+            `;
+            card.querySelector('.popup-desc').appendChild(sanitizeToFragment(item.row.descripcion));
+
+            if (!item.isHotel) {
+                const d = haversine(CONFIG.hotel.lat, CONFIG.hotel.lng, item.lat, item.lng);
+                const meta = document.createElement('div');
+                meta.className = 'popup-meta';
+                meta.innerHTML = `<i class="fa-solid fa-person-walking"></i><span>${distanceText(d, 'fromHotel')}</span>`;
+                card.appendChild(meta);
+            }
+
+            const a = document.createElement('a');
+            a.className = 'btn-navigate';
+            a.href = `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}&travelmode=walking`;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.innerHTML = `<i class="fa-solid fa-location-arrow"></i> ${t('directions')}`;
+            card.appendChild(a);
+            return card;
+        }
+
+        function renderChips() {
+            const sel = $('cat-select');
+            sel.innerHTML = '';
+            const groups = new Map();
+            let total = 0;
+
+            items.forEach(it => {
+                if (it.isHotel) return;
+                total++;
+                if (!groups.has(it.catKey)) groups.set(it.catKey, { key: it.catKey, label: it.row.categoria || t('other'), n: 0 });
+                groups.get(it.catKey).n++;
+            });
+
+            const addOpt = (val, lbl) => {
+                const o = document.createElement('option');
+                o.value = val; o.textContent = lbl;
+                sel.appendChild(o);
+            };
+
+            addOpt('all', t('all') + ' (' + total + ')');
+            groups.forEach(g => addOpt(g.key, g.label + ' (' + g.n + ')'));
+            sel.value = activeCat;
+        }
+
+        function applyFilter() {
+            markersLayer.clearLayers();
+            items.forEach(it => {
+                if (it.isHotel || activeCat === 'all' || it.catKey === activeCat) {
+                    markersLayer.addLayer(it.marker);
+                }
+            });
+        }
+
+        $('cat-select').onchange = e => { activeCat = e.target.value; applyFilter(); };$('btn-hotel').onclick = () => map.flyTo([CONFIG.hotel.lat, CONFIG.hotel.lng], 17);
+
+        /* Buscador */
+        const searchInput = $('search'), resultsBox =$('results');
+        searchInput.oninput = () => {
+            const q = norm(searchInput.value);
+            resultsBox.innerHTML = '';
+            if (!q) { resultsBox.classList.remove('open'); return; }
+
+            const found = items.filter(it => it.search.includes(q)).slice(0, 6);
+            if (!found.length) {
+                resultsBox.innerHTML = `<div class="no-results">${t('noResults')}</div>`;
+            } else {
+                found.forEach(it => {
+                    const b = document.createElement('button');
+                    b.className = 'result-item';
+                    b.innerHTML = `<span class="result-dot" style="background:${it.color}"><i class="fa-solid fa-${it.icon}"></i></span><span class="result-text"><b>${it.row.nombre}</b><small>${it.row.categoria || ''}</small></span>`;
+                    b.onclick = () => {
+                        resultsBox.classList.remove('open');
+                        searchInput.blur();
+                        map.flyTo([it.lat, it.lng], 17);
+                        it.marker.openPopup();
+                    };
+                    resultsBox.appendChild(b);
+                });
+            }
+            resultsBox.classList.add('open');
+        };
+
+        /* Geolocalización */
+        $('btn-locate').onclick = () => {
+            if (!navigator.geolocation) { alert(t('locUnsupported')); return; }
+            navigator.geolocation.getCurrentPosition(pos => {
+                userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                if (userLayer) map.removeLayer(userLayer);
+                const dot = L.marker([userPos.lat, userPos.lng], {
+                    icon: L.divIcon({ className: 'custom-pin-wrapper', html: '<div class="me-pin"></div>', iconSize: [18, 18], iconAnchor: [9,9] })
+                }).bindPopup(t('youAreHere'));
+                userLayer = L.layerGroup([dot]).addTo(map);
+                $('btn-locate').classList.add('on');
+                map.flyTo([userPos.lat, userPos.lng], 16);
+            }, () => alert(t('locDenied')), { enableHighAccuracy: true });
+        };
+
+        /* Idiomas */
+        function applyLang(l) {
+            lang = I18N[l] ? l : 'es';
+            document.documentElement.lang = lang;
+            try { localStorage.setItem(CONFIG.langKey, lang); } catch(e){}
+            document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => el.placeholder = t(el.dataset.i18nPh));
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+            if (items.length) renderChips();
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(b => b.onclick = () => applyLang(b.dataset.lang));
+
+        // Inicialización
+        let savedLang = 'es';
+        try { savedLang = localStorage.getItem(CONFIG.langKey) || 'es'; } catch(e){}
+        applyLang(savedLang);
+        loadData();
+    })();
     </script>
 </body>
 </html>
