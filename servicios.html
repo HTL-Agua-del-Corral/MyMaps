@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1A2B3C">
+    <title>Servicios & Info - Hotel Agua del Corral</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --primary-dark: #1A2B3C;
+            --accent-gold: #C5A059;
+            --bg-light: #F8F9FA;
+            --text-main: #2D3748;
+            --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* ---------- Encabezado idéntico ---------- */
+        header {
+            background: linear-gradient(135deg, #111E2B 0%, var(--primary-dark) 100%);
+            color: #FFF;
+            padding: calc(12px + var(--safe-top)) calc(16px + var(--safe-right)) 12px calc(16px + var(--safe-left));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.15);
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-gold);
+            position: sticky;
+            top: 0;
+        }
+        .brand-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.05rem, 4vw, 1.4rem);
+            font-weight: 700;
+            letter-spacing: .5px;
+            line-height: 1.15;
+        }
+        .brand-subtitle {
+            font-size: clamp(.62rem, 2.4vw, .75rem);
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: rgba(255,255,255,.1);
+            border-radius: 999px;
+            padding: 3px;
+        }
+        .lang-btn {
+            border: none;
+            background: transparent;
+            color: #FFF;
+            font: 600 .75rem 'Plus Jakarta Sans', sans-serif;
+            padding: 7px 11px;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+        .lang-btn.active { background: var(--accent-gold); color: #1A1A1A; }
+
+        /* ---------- Contenido Principal ---------- */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px calc(16px + var(--safe-right)) calc(40px + var(--safe-bottom)) calc(16px + var(--safe-left));
+            flex: 1;
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .88rem;
+            margin-bottom: 20px;
+        }
+        .nav-back:hover { color: var(--accent-gold); }
+
+        .page-heading {
+            margin-bottom: 24px;
+        }
+        .page-heading h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+        .page-heading p {
+            color: #718096;
+            font-size: .95rem;
+        }
+
+        /* ---------- Tarjetas de Sección ---------- */
+        .card-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .section-card {
+            background: #FFF;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: var(--shadow-card);
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .section-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-card h2 i {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+        }
+
+        .info-list {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+        .info-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .92rem;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #EDF2F7;
+        }
+        .info-list li:last-child { border-bottom: none; padding-bottom: 0; }
+        .info-list span:first-child { color: #4A5568; font-weight: 500; }
+        .info-list span:last-child { color: var(--primary-dark); font-weight: 600; text-align: right; }
+
+        .desc-text {
+            font-size: .92rem;
+            color: #4A5568;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        /* Botones de acción rápida en tarjetas */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .btn-action {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #F7FAFC;
+            color: var(--primary-dark);
+            border: 1px solid #E2E8F0;
+            padding: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: .85rem;
+            font-weight: 600;
+            transition: all .2s;
+        }
+        .btn-action:hover {
+            background: var(--primary-dark);
+            color: #FFF;
+            border-color: var(--primary-dark);
+        }
+
+        /* Footer sutil */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: .8rem;
+            color: #A0AEC0;
+            border-top: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <div class="brand-title">Agua del Corral</div>
+            <div class="brand-subtitle">Hotel & Spa • Mendoza</div>
+        </div>
+        <div class="lang-switch" role="group" aria-label="Idioma">
+            <button class="lang-btn active" data-lang="es">ES</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="pt">PT</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Volver al Mapa Interactivo</a>
+
+        <div class="page-heading">
+            <h1>Guía de Servicios & Info</h1>
+            <p>Todo lo que necesitas saber para disfrutar al máximo tu estadía con nosotros.</p>
+        </div>
+
+        <div class="card-grid">
+            
+            <!-- Horarios y Estancia -->
+            <div class="section-card">
+                <h2><i class="fa-solid fa-clock"></i> Horarios de Estancia</h2>
+                <ul class="info-list">
+                    <li><span>Check-in (Ingreso)</span><span>14:00 hs</span></li>
+                    <li><span>Check-out (Salida)</span><span>10:30 hs</span></li>
+                    <li><span>Desayuno Buffet</span><span>07:00 a 10:30 hs</span></li>
+                    <li><span>Recepción y Conserjería</span><span>24 Horas</span></li>
+                </ul>
+            </div>
+
+            <!-- Spa & Bienestar -->
+            <div class="section-card">
+                <h2><i class="fa-solid fa-spa"></i> Spa & Bienestar</h2>
+                <p class="desc-text">Relájate en nuestras instalaciones exclusivas. Contamos con sesiones de masajes descontracturantes, relajantes y nuestra revitalizante <strong>ducha escocesa</strong> (consultar turnos disponibles en recepción).</p>
+                <ul class="info-list">
+                    <li><span>Horario del Spa</span><span>10:00 a 20:00 hs</span></li>
+                    <li><span>Reserva previa</span><span>Obligatoria (Int. 120)</span></li>
+                </ul>
+                <div class="card-actions">
+                    <a href="tel:+549261000000" class="btn-action"><i class="fa-solid fa-phone"></i> Reservar Turno</a>
+                </div>
+            </div>
+
+            <!-- Restaurante & Gastronomía -->
+            <div class="section-card">
+                <h2><i class="fa-solid fa-utensils"></i> Restaurante & Bar</h2>
+                <p class="desc-text">Disfruta de la alta cocina regional y los mejores vinos de Mendoza sin moverte del hotel. Servicio a la carta, picadas regionales y coctelería de autor.</p>
+                <ul class="info-list">
+                    <li><span>Almuerzo / Cena</span><span>12:30 a 23:30 hs</span></li>
+                    <li><span>Room Service</span><span>Disponible hasta las 23:00 hs</span></li>
+                </ul>
+            </div>
+
+            <!-- Contacto Directo -->
+            <div class="section-card">
+                <h2><i class="fa-solid fa-headset"></i> Contacto Directo</h2>
+                <p class="desc-text">¿Necesitas asistencia con tu equipaje, transporte, excursiones a alta montaña o reservas? Comunícate directamente con nuestro equipo.</p>
+                <ul class="info-list">
+                    <li><span>Recepción (Desde la habitación)</span><span>Marcar 9</span></li>
+                    <li><span>Teléfono Principal</span><span>+54 9 261 4000000</span></li>
+                    <li><span>Correo Electrónico</span><span>recepcion@aguadelcorral.com</span></li>
+                </ul>
+                <div class="card-actions">
+                    <a href="tel:+5492614000000" class="btn-action"><i class="fa-solid fa-phone"></i> Llamar a Recepción</a>
+                    <a href="mailto:recepcion@aguadelcorral.com" class="btn-action"><i class="fa-solid fa-envelope"></i> Enviar Email</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        Hotel Agua del Corral &copy; 2026 • Amigorena 36, Mendoza, Argentina
+    </footer>
+
+    <script>
+        // Sincronización básica de idioma simulada para la botonera
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
