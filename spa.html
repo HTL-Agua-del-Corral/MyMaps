@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1A2B3C">
+    <title>Servicios Spa - Hotel Agua del Corral</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --primary-dark: #1A2B3C;
+            --accent-gold: #C5A059;
+            --bg-light: #F8F9FA;
+            --text-main: #2D3748;
+            --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #111E2B 0%, var(--primary-dark) 100%);
+            color: #FFF;
+            padding: calc(12px + var(--safe-top)) calc(16px + var(--safe-right)) 12px calc(16px + var(--safe-left));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.15);
+            z-index: 3000;
+            border-bottom: 2px solid var(--accent-gold);
+            position: sticky;
+            top: 0;
+        }
+        .brand-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.05rem, 4vw, 1.4rem);
+            font-weight: 700;
+            letter-spacing: .5px;
+            line-height: 1.15;
+        }
+        .brand-subtitle {
+            font-size: clamp(.62rem, 2.4vw, .75rem);
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lang-switch {
+            display: flex;
+            background: rgba(255,255,255,.1);
+            border-radius: 999px;
+            padding: 3px;
+        }
+        .lang-btn {
+            border: none;
+            background: transparent;
+            color: #FFF;
+            font: 600 .75rem 'Plus Jakarta Sans', sans-serif;
+            padding: 7px 11px;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+        .lang-btn.active { background: var(--accent-gold); color: #1A1A1A; }
+
+        /* Menú Hamburguesa */
+        .menu-wrap {
+            position: relative;
+            z-index: 4000;
+        }
+        .menu-toggle {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,.2);
+            color: #FFF;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background .2s;
+        }
+        .menu-toggle:hover { background: rgba(255,255,255,.2); }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            background: #FFF;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            width: 220px;
+            padding: 8px;
+            display: none;
+            z-index: 9999;
+            animation: fadeIn .15s ease-out;
+        }
+        .dropdown-menu.open { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .menu-item {
+            display: flex; align-items: center; gap: 10px;
+            width: 100%;
+            padding: 11px 14px;
+            border: none; background: transparent;
+            text-align: left;
+            cursor: pointer;
+            font: 500 .9rem 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background .15s, color .15s;
+        }
+        .menu-item i {
+            color: var(--accent-gold);
+            width: 18px;
+            text-align: center;
+        }
+        .menu-item:hover {
+            background: #F7FAFC;
+            color: var(--primary-dark);
+        }
+
+        /* Contenido Principal */
+        .container {
+            max-width: 850px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px calc(16px + var(--safe-right)) calc(40px + var(--safe-bottom)) calc(16px + var(--safe-left));
+            flex: 1;
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .88rem;
+            margin-bottom: 20px;
+        }
+        .nav-back:hover { color: var(--accent-gold); }
+
+        .page-heading {
+            margin-bottom: 24px;
+        }
+        .page-heading h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+        .page-heading p {
+            color: #718096;
+            font-size: .95rem;
+        }
+
+        /* Tarjeta de Información General */
+        .info-card {
+            background: #FFF;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: var(--shadow-card);
+            border-left: 4px solid var(--accent-gold);
+            margin-bottom: 24px;
+        }
+        .info-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-card h2 i { color: var(--accent-gold); }
+        .info-card p {
+            font-size: .92rem;
+            color: #4A5568;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .info-list {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+        .info-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .92rem;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #EDF2F7;
+        }
+        .info-list li:last-child { border-bottom: none; padding-bottom: 0; }
+        .info-list span:first-child { color: #4A5568; font-weight: 500; }
+        .info-list span:last-child { color: var(--primary-dark); font-weight: 600; text-align: right; }
+
+        /* Lista de Servicios con Imagen Integrada */
+        .services-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .service-card {
+            background: #FFF;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            border-top: 4px solid var(--accent-gold);
+        }
+
+        @media (min-width: 600px) {
+            .service-card {
+                flex-direction: row;
+                align-items: stretch;
+            }
+        }
+
+        .service-img-wrap {
+            flex: 0 0 220px;
+            position: relative;
+            min-height: 180px;
+            background: #EDF2F7;
+        }
+
+        .service-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .service-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .service-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .service-text {
+            font-size: .9rem;
+            color: #4A5568;
+            line-height: 1.55;
+            margin-bottom: 8px;
+        }
+
+        .service-text strong {
+            color: var(--primary-dark);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: .8rem;
+            color: #A0AEC0;
+            border-top: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <div class="brand-title">Agua del Corral</div>
+            <div class="brand-subtitle">Hotel & Spa • Mendoza</div>
+        </div>
+        <div class="header-right">
+            <div class="lang-switch" role="group" aria-label="Idioma">
+                <button class="lang-btn active" data-lang="es">ES</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="pt">PT</button>
+            </div>
+            
+            <div class="menu-wrap">
+                <button class="menu-toggle" id="menu-btn" aria-label="Menú principal"><i class="fa-solid fa-bars"></i></button>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="index.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> Mapa</a>
+                    <a href="servicios.html" class="menu-item"><i class="fa-solid fa-concierge-bell"></i> Servicios</a>
+                    <a href="spa.html" class="menu-item"><i class="fa-solid fa-spa"></i> Servicios Spa</a>
+                    <a href="tel:+5492612352727" class="menu-item"><i class="fa-solid fa-headset"></i> Contacto</a>
+                    <a href="blog.html" class="menu-item"><i class="fa-solid fa-book-open"></i> Blog</a>
+                    <a href="https://g.page/r/tu-enlace-de-google-reviews" target="_blank" rel="noopener noreferrer" class="menu-item"><i class="fa-solid fa-star"></i> Dejar reseña</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="servicios.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Volver a Servicios Generales</a>
+
+        <div class="page-heading">
+            <h1>Servicios Spa & Bienestar</h1>
+            <p>Tratamientos exclusivos diseñados para revitalizar cuerpo, mente y alma.</p>
+        </div>
+
+        <!-- 15. Información del Spa -->
+        <div class="info-card">
+            <h2><i class="fa-solid fa-circle-info"></i> 15. Información del Spa</h2>
+            <p class="service-text" lang="es">A la hora de relajarse, permítase disfrutar de la experiencia que Agua del Corral Hotel & Spa tiene para ofrecer. El acceso al SPA es exclusivo para mayores de 18 años. Los tratamientos, masajes y el uso de los Jacuzzis son servicios con cargo adicional. Horario Spa: Todos los días de 9:00 hs. a 21:00 hs. Para consultas comunicarse al (0261) 4200035 interno 2007.</p>
+            <p class="service-text" lang="en" style="display:none;">When it comes to relaxing, allow yourself to enjoy the experience that Agua del Corral Hotel & Spa has to offer. Access to the SPA is exclusive for over 18 years. The treatments, massages and use of the Jacuzzis are services with additional charges. Spa Hours: Every day from 9:00 hs. to 21:00 hs. For inquiries contact (0261) 4200035 internal 2007.</p>
+            <p class="service-text" lang="pt" style="display:none;">Quando se trata de relaxar, aproveite a experiência que o Agua del Corral Hotel & Spa oferece. O acesso ao SPA é exclusivo há mais de 18 anos. Os tratamentos, massagens e uso de jacuzzis são serviços com custo adicional. Horário do spa: Todos os dias a partir das 9:00 hs. às 21:00 hs. Para mais informações, contacte (0261) 4200035 interno 2007.</p>
+        </div>
+
+        <!-- Catálogo Completo de los 14 Tratamientos del Word -->
+        <div class="services-grid">
+
+            <!-- 1. Masaje Descontracturante -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen1.jpg" alt="Masaje Descontracturante" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>1. Masaje Descontracturante</h3>
+                    <p class="service-text" lang="es">Es un método de valoración y tratamiento manual que se realiza para relajar la musculatura, disolver las contracturas que se producen en el cuerpo, mejorar la circulación sanguínea y conseguir un alivio del estrés. La terapia consiste en masajes en todo el cuerpo utilizando cremas aromatizadas o neutras, según lo requiera el paciente.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Relieving Massage:</strong> This is an assessment method and manual treatment that is performed to relax the muscles, dissolve muscle knots that occur in the body, improve blood circulation and achieve stress relief. The therapy consists of massaging the entire body using perfumed or non-perfumed creams, as requested by the patient.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Massagem Descontraturante:</strong> É um método de valorização e tratamento manual realizado para relaxar a musculatura, minimizar as contrações produzidas no corpo, melhorar a circulação sanguínea e obter um alívio do estresse. A terapia consiste em massagens em todo o corpo utilizando cremes aromatizados ou neutros, conforme o paciente quiser.</p>
+                </div>
+            </article>
+
+            <!-- 2. Limpieza y Masaje Facial -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen2.jpg" alt="Limpieza y Masaje Facial" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>2. Limpieza y Masaje Facial</h3>
+                    <p class="service-text" lang="es">Es un tratamiento indispensable para mantener la higiene de la piel del rostro. Este tratamiento consiste en la limpieza de cutis que incluye una primera limpieza para retirar la suciedad más superficial y una exfoliación para desincrustar las impurezas más profundas. Luego la colocación de una mascarilla para cerrar poros, acompañado de una loción tónica y por último una crema hidratante conjunto a un masaje suave para desinflamar la zona.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Cleansing and Facial Massage:</strong> This is an important treatment required to maintain the hygiene of the facial skin. This treatment consists of cleansing the skin which consists of an initial clean to remove the most superficial dirt followed by an exfoliation to remove the deepest impurities. Then smoothing on a mask to close the pores, accompanied by a skin toner and finally a moisturizer combined with a gentle massage to sooth the area.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Limpeza e Massagem Facial:</strong> É um tratamento indispensável para manter a higiene da pele do rosto. Este tratamento consiste na limpeza de cútis que inclui uma primeira limpeza para retirar a sujeira mais superficial e uma esfoliação para desincrustar as impurezas mais profundas. Após a colocação da máscara para fechar os poros, acompanhada de uma loção tônica e por último um creme hidratante junto a uma massagem suave para desinflamar a zona.</p>
+                </div>
+            </article>
+
+            <!-- 3. Masaje Relajante -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen3.jpg" alt="Masaje Relajante" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>3. Masaje Relajante</h3>
+                    <p class="service-text" lang="es">El masaje sedativo está indicado principalmente, a una persona sana, que no sufre una lesión concreta o fatiga muscular. Su propósito es aliviar consecuencias psicofísicas, las físicas y las emocionales que genera el estrés. Este tratamiento consiste en movimientos suaves y armónicos, evitando los cambios bruscos de ritmo y la pérdida de contacto proporcionando una relajación general.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Relaxing Massage:</strong> A relaxing massage is indicated primarily for a healthy person who does not suffer from any specific injury or muscle fatigue. Its purpose is to relieve the psychophysical, physical and emotional consequences of stress. This treatment consists of smooth and harmonic movements, avoiding sudden changes in rhythm and loss of contact while providing general relaxation.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Massagem Relaxante:</strong> A massagem sedativa é indicada principalmente para uma pessoa que não sofre de lesão concreta ou fadiga muscular. Seu propósito é aliviar consequências psicofísicas, as físicas e as emocionais que geram o estresse. Este tratamento consiste em movimentos suaves e harmônicos, evitando as mudanças bruscas de ritmo e a perda de contato proporcionando um relax geral.</p>
+                </div>
+            </article>
+
+            <!-- 4. Masaje Linfático -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen4.jpg" alt="Masaje Linfático" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>4. Masaje Linfático</h3>
+                    <p class="service-text" lang="es">Es un tipo de masaje que consiste en la activación del funcionamiento del sistema linfático superficial para mejorar la eliminación de líquido intersticial y facilitar su evacuación. Este tratamiento consiste básicamente en maniobras manuales muy suaves que se realizan con el fin de drenar o desplazar la linfa que por cualquier causa patológica se encuentra estancada a territorios linfáticos sanos para su evacuación normal hacia el torrente venoso.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Lymphatic Massage:</strong> This is a type of massage that involves the activation of the superficial lymphatic system to improve and facilitate the removal of interstitial fluid. This treatment consists basically of very gentle manual maneuvers that are performed in order to drain or shift the lymph node that due to pathological issues has become stagnant and return it to its healthy lymphatic function for normal drainage into the bloodstream.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Massagem Linfática:</strong> É um tipo de massagem que consiste na ativação do funcionamento do sistema linfático superficial para melhorar a eliminação de líquido intersticial e facilitar sua evacuação. Este tratamento consiste basicamente em manobras manuais muito suaves feitas com o fim de drenar ou deslocar a linfa que por qualquer causa patológica fica estancada em territórios linfáticos sadios para sua evacuação normal à corrente venosa.</p>
+                </div>
+            </article>
+
+            <!-- 5. Masaje Reductor -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen5.jpg" alt="Masaje Reductor" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>5. Masaje Reductor</h3>
+                    <p class="service-text" lang="es">Es una modalidad de masaje que se realiza con una presión fuerte y una velocidad más rápida a la usual. Ayuda a eliminar el acumulo de grasa localizada y a la vez, estilizar el contorno de la figura logrando una silueta más estética. En este masaje se trabajan las zonas con mayor cantidad de grasa del cuerpo, provocando calor con especiales movimientos que ayudan a disolver el tejido adiposo.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Reducing Massage:</strong> This is a massage modality that is performed using strong pressure and faster strokes than usual. It helps to eliminate the accumulation of localized fat and at the same time, assists in forming the human outline achieving a more aesthetic figure. During this massage, the areas with the greatest amount of body fat are worked, producing heat with special movements that help to dissolve the fatty tissue and aid in its removal.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Massagem Redutora:</strong> É uma modalidade de massagem que se faz com uma pressão forte e uma velocidade mais rápida que a usual. Ajuda a eliminar o acúmulo de gordura localizada e ao mesmo tempo estilizar o contorno da figura obtendo uma silueta mais estética. Nesta massagem são trabalhadas as zonas com maior quantidade de gordura do corpo, provocando calor com especiais movimentos que ajudam a dissolver o tecido adiposo.</p>
+                </div>
+            </article>
+
+            <!-- 6. Masaje Oriental con Piedras Calientes -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen6.jpg" alt="Masaje Oriental con Piedras Calientes" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>6. Masaje Oriental con Piedras Calientes</h3>
+                    <p class="service-text" lang="es">Esta terapia consiste en combinar el masaje terapéutico tradicional con la aplicación de piedras calientes de origen volcánico en puntos determinados del cuerpo. Se trata de una antigua técnica de masaje oriental inspirada en centros energéticos llamados chacras, sobre los cuales se ubican las piedras, consiguiendo así, que la energía fluya adecuadamente. Está especialmente recomendada para dilatar los vasos sanguíneos y linfáticos favoreciendo la circulación sanguínea, para problemas nerviosos como el estrés, la ansiedad o el insomnio y para aliviar los dolores musculares y articulares.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Oriental with Hot Stone Massage:</strong> This therapy consists of combining the traditional therapeutic massage by using hot volcanic stones on certain parts of the body. It is an ancient oriental massage technique inspired by energy centers called chakras, on which the stones are placed, thus getting the energy to flow properly. It is strongly recommended to dilate the blood and lymphatic vessels favoring blood circulation, for nervous disorders such as stress, anxiety, insomnia and to relieve muscle and joint pain.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Massagem Oriental com Pedras Quentes:</strong> Essa terapia consiste em combinar a massagem terapêutica tradicional com a aplicação de pedras quentes de origem vulcânica em determinados pontos do corpo. É uma antiga técnica de massagem oriental, inspirada em centros energéticos chamados de chacras, sobre os quais as pedras são colocadas, fazendo com que a energia flua adequadamente. Essa técnica é especialmente recomendada para dilatar os vasos sanguíneos e linfáticos, o que favorece a circulação sanguínea, para problemas nervosos, como estresse, ansiedade, insônia, e para aliviar dores musculares e articulares.</p>
+                </div>
+            </article>
+
+            <!-- 7. Masaje con Caña de Bambú -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen7.jpg" alt="Masaje con Caña de Bambú" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>7. Masaje con Caña de Bambú</h3>
+                    <p class="service-text" lang="es">Es una técnica oriental que se realiza a base de cañas de bambú. Gracias a los movimientos de las mismas sobre la piel, se produce un efecto sedante-relajante sobre las terminaciones nerviosas, siendo muy efectivo como relajante muscular y renovador de la energía, para liberar las tensiones acumuladas. Además, la presión por rozamiento y deslizamiento, favorece el drenaje de líquidos retenidos y la regeneración de los tejidos, por lo que combate la grasa localizada y reafirma la piel. Es decir, elimina toxinas, mejora la circulación sanguínea, combate la celulitis y remodela la silueta.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Bamboo Massage:</strong> It is an oriental technique performed using bamboo canes. Their movement on the skin causes a soothing-relaxing effect on nerve endings, making it a very effective muscle relaxant and energy restorer, to release accumulated stress. In addition, pressure by friction and sliding favors the drainage of retained fluids and tissue regeneration, thus combating localized fat and reaffirming the skin. In other words, it eliminates toxins, improves blood circulation, combats cellulite and reshapes the figure.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Massagem com Bambu:</strong> É uma técnica oriental realizada com bastões de bambu. Graças aos seus movimentos sobre a pele, é produzido um efeito relaxante e sedativo nas terminações nervosas, sendo muito eficaz como relaxante muscular e renovadora de energia, para liberar as tensões acumuladas. Além disso, a pressão por fricção e deslizamento favorece a drenagem de líquidos retidos e a regeneração dos tecidos, combatendo a gordura localizada e reafirmando a pele. Ou seja, ela elimina toxinas, melhora a circulação sanguínea, combate a celulite e remodela a silueta.</p>
+                </div>
+            </article>
+
+            <!-- 8. Reflexología -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen8.jpg" alt="Reflexología" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>8. Reflexología</h3>
+                    <p class="service-text" lang="es">Es la práctica de estimular puntos sobre los pies, manos, nariz u orejas llamados zonas reflejas. Existen conexiones entre esos puntos y órganos situados en otro lugar del cuerpo y su estimulación podría aliviar dolencias tales como el dolor de espalda, dolor en el cuello, estreñimiento, gastritis, dolores menstruales, asma, cefalea, entre otros. Este tratamiento consiste en efectuar presión y masaje en ciertos puntos de los pies actuando a distancia sobre todo el organismo.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Reflexology:</strong> This is the practice of stimulating pressure points on the feet, hands, nose or ears called reflex zones. There are connections between these points and organs located in other areas of the body and their stimulation is able to relieve ailments such as back pain, neck pain, constipation, gastritis, menstrual pains, asthma, and headaches, among other health issues. This treatment involves pressure and massage at certain points of the feet which act at a distance over the entire organism.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Reflexologia:</strong> É a prática de estimular pontos sobre os pés, mãos, nariz ou orelhas, chamados zonas reflexas. Existem conexões entre estes pontos e órgãos situados em outro lugar do corpo e seu estímulo poderia aliviar dores tais como a dor nas costas, dor no pescoço, prisão de ventre, gastrite, dores menstruais, asma, cefaleia, entre outras. Este tratamento consiste em efetuar pressão e massagem em certos pontos dos pés, agindo à distância sobre todo o organismo.</p>
+                </div>
+            </article>
+
+            <!-- 9. Reiki -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen9.jpg" alt="Reiki" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>9. Reiki</h3>
+                    <p class="service-text" lang="es">Es una técnica de canalización y transmisión de energía vital a través de la imposición de manos, que se utiliza para obtener paz y equilibrio en todos los niveles: físico, mental, emocional y espiritual. Esta técnica actúa en profundidad yendo a la raíz del problema físico o emocional.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Reiki:</strong> This is a technique of channeling and transmitting vital energy through the placement of the hands, which helps in obtaining peace and balance at all levels: physical, mental, emotional and spiritual. This technique acts in depth going to the root of the physical or emotional problem.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Reiki:</strong> É uma técnica de canalização e transmissão de energia vital através da imposição de mãos, que se utiliza para obter paz e equilíbrio em todos os níveis: físico, mental, emocional e espiritual. Esta técnica age em profundidade indo à raiz do problema físico ou emocional.</p>
+                </div>
+            </article>
+
+            <!-- 10. Spa de Manos -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen10.jpg" alt="Spa de Manos" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>10. Spa de Manos</h3>
+                    <p class="service-text" lang="es">Es un servicio de manicuria, combinado con un tratamiento que protege y cuida la piel de las manos. Las manos son tu carta de presentación, por eso, para el esmaltado podrás elegir desde tonos puros y clásicos, hasta vanguardistas. Este tratamiento consiste en un masaje pulidor e hidratación de las manos, limado, extracción de cutículas, extracción de durezas, y esmaltado de uñas.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Hand Spa:</strong> This is a manicure service, combined with a treatment that protects and takes care of the skin of the hands. The hands are your first introduction, so, as nail polish you can choose from pure and classic colors, to more avant-garde ones. This treatment consists of a massage and hydration of the hands, filing, removal of cuticles and calluses, and application of nail polish.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Spa de Mãos:</strong> É um serviço de manicure, combinado com um tratamento que protege e cuida da pele das mãos. As mãos são a carta de apresentação, por isso, para o esmaltado você poderá escolher de tons puros e clássicos até os vanguardistas. Este tratamento consiste em uma massagem de polimento e hidratação das mãos, lixamento, extração de durezas e esmaltação de unhas.</p>
+                </div>
+            </article>
+
+            <!-- 11. Spa de Pies -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen11.jpg" alt="Spa de Pies" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>11. Spa de Pies</h3>
+                    <p class="service-text" lang="es">Es un servicio de pedicuría, combinado con un tratamiento que protege y cuida la piel de los pies. Este tratamiento consiste en un masaje pulidor e hidratación de las pies, limado, extracción de cutículas, extracción de durezas, y esmaltado de uñas.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Foot Spa:</strong> This is a pedicure service, combined with a treatment that protects and cares for the skin of the feet. This treatment consists of a massage and hydration of the feet, filing, cuticle and callus removal, and application of nail polish.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Spa de Pés:</strong> É um tratamento de pedicure combinado com um tratamento que protege e cuida da pele dos pés. Este tratamento consiste em uma massagem polidora e hidratação dos pés, lixamento, extração de durezas e esmaltação de unhas.</p>
+                </div>
+            </article>
+
+            <!-- 12. Manicuría - Pedicuría Tradicional -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen12.jpg" alt="Manicuría - Pedicuría Tradicional" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>12. Manicuría - Pedicuría Tradicional</h3>
+                    <p class="service-text" lang="es">Es un tratamiento de cosmética para el embellecimiento de las uñas. Este tratamiento consiste en el limado y esmaltado de uñas desde tonos clásicos hasta los más atrevidos y de temporada.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Traditional Manicure - Pedicure:</strong> This is a cosmetic treatment for nail beautification. This treatment consists of filing and applying nail polishing from classic colors to more daring and seasonal tones.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Manicure - Pedicure Tradicional:</strong> É um tratamento de cosmética para o embelezamento das unhas. Este tratamento consiste em lixar as unhas e esmaltar desde tons clássicos até os mais atrevidos e de temporada.</p>
+                </div>
+            </article>
+
+            <!-- 13. Peeling Químico -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen13.jpg" alt="Peeling Químico" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>13. Peeling Químico</h3>
+                    <p class="service-text" lang="es">Es un procedimiento de rejuvenecimiento de la piel, se aplica una solución química para eliminar las capas superiores dañadas. Los peelings químicos se pueden utilizar para tratar arrugas, líneas de expresión, eliminar manchas faciales, secuelas del acné y para las cicatrices, sobre todo en la zona de la cara, donde tienen un efecto rejuvenecedor bastante notable. También puede realizarse a nivel corporal. El pulido y exfoliación química se puede hacer sola o en combinación con otros tratamientos cosméticos.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Chemical Peeling:</strong> This is a skin rejuvenation procedure in which a chemical solution is applied in order to remove the damaged upper layers of the skin. Chemical peels can be used to treat wrinkles, expression lines, remove facial blemishes, acne spots and scars, especially on the face, where the procedure has quite a remarkable rejuvenating effect. It can also be performed on the entire body. Polishing and chemical peeling can be performed alone or in combination with other cosmetic treatments.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Peeling Químico:</strong> É um procedimento de rejuvenescimento da pele onde se aplica uma solução química com o fim de eliminar as camadas superiores danificadas. Os peelings químicos podem ser utilizados para tratar rugas, linhas de expressão, eliminar manchas faciais, sequelas de acne, e para as cicatrizes, sobretudo na zona do rosto, onde têm um efeito rejuvenecedor bastante notável. Também pode ser feito no corpo. O polimento e esfoliação química pode ser feitos por separado ou em combinação com outros tratamentos cosméticos.</p>
+                </div>
+            </article>
+
+            <!-- 14. Peeling Mecánico -->
+            <article class="service-card">
+                <div class="service-img-wrap"><img src="imagen14.jpg" alt="Peeling Mecánico" loading="lazy"></div>
+                <div class="service-content">
+                    <h3>14. Peeling Mecánico</h3>
+                    <p class="service-text" lang="es">Es un procedimiento de higiene profunda con extracción de puntos negros, comedones y espinillas. Es realizado a base de pulidos manuales y una exfoliación intensiva con Puntas de Diamante, obteniendo una piel más fina libre de impurezas, sellando los poros dilatados y dejando la piel tersa y uniforme. Se combina con mascarillas acordes al biotipo cutáneo del paciente.</p>
+                    <p class="service-text" lang="en" style="display:none;"><strong>Mechanical Peeling:</strong> This is a deep hygiene process which includes the extraction of blackheads, whiteheads and pimples. It is carried out via manual cleansing and intensive exfoliation with Diamond Tips, obtaining a finer skin free of impurities, closing the dilated pores and leaving the skin smooth and uniform. It is combined with masks according to the patient's skin biotype.</p>
+                    <p class="service-text" lang="pt" style="display:none;"><strong>Peeling Mecânico:</strong> É um procedimento de higiene profunda com extração de pontos negros, cravos e espinhas. É feito com base em polimentos manuais e uma esfoliação intensiva com Pontas de Diamante, obtendo uma pele mais fina e livre de impurezas, selando os poros dilatados e deixando a pele tersa e uniforme. Combina-se com máscaras de acordo com o biotipo cutâneo do paciente.</p>
+                </div>
+            </article>
+
+        </div>
+    </div>
+
+    <footer>
+        Hotel Agua del Corral © 2026 • Amigorena 36, Mendoza, Argentina
+    </footer>
+
+    <script>
+        // Menú Hamburguesa
+        const menuBtn = document.getElementById('menu-btn');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        menuBtn.onclick = e => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('open');
+        };
+
+        document.onclick = () => {
+            dropdownMenu.classList.remove('open');
+        };
+
+        // Cambio de Idioma Dinámico (ES / EN / PT)
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.dataset.lang;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                document.querySelectorAll('[lang]').forEach(el => {
+                    if (el.tagName.toLowerCase() !== 'html') {
+                        el.style.display = el.getAttribute('lang') === lang ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
