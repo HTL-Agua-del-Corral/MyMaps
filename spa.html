@@ -37,117 +37,6 @@
             -webkit-text-size-adjust: 100%;
         }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #111E2B 0%, var(--primary-dark) 100%);
-            color: #FFF;
-            padding: calc(12px + var(--safe-top)) calc(16px + var(--safe-right)) 12px calc(16px + var(--safe-left));
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,.15);
-            z-index: 3000;
-            border-bottom: 2px solid var(--accent-gold);
-            position: sticky;
-            top: 0;
-        }
-        .brand-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.05rem, 4vw, 1.4rem);
-            font-weight: 700;
-            letter-spacing: .5px;
-            line-height: 1.15;
-        }
-        .brand-subtitle {
-            font-size: clamp(.62rem, 2.4vw, .75rem);
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 600;
-            margin-top: 2px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .lang-switch {
-            display: flex;
-            background: rgba(255,255,255,.1);
-            border-radius: 999px;
-            padding: 3px;
-        }
-        .lang-btn {
-            border: none;
-            background: transparent;
-            color: #FFF;
-            font: 600 .75rem 'Plus Jakarta Sans', sans-serif;
-            padding: 7px 11px;
-            border-radius: 999px;
-            cursor: pointer;
-        }
-        .lang-btn.active { background: var(--accent-gold); color: #1A1A1A; }
-
-        /* Menú Hamburguesa */
-        .menu-wrap {
-            position: relative;
-            z-index: 4000;
-        }
-        .menu-toggle {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.2);
-            color: #FFF;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background .2s;
-        }
-        .menu-toggle:hover { background: rgba(255,255,255,.2); }
-
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            top: calc(100% + 8px);
-            background: #FFF;
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-            width: 220px;
-            padding: 8px;
-            display: none;
-            z-index: 9999;
-            animation: fadeIn .15s ease-out;
-        }
-        .dropdown-menu.open { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-
-        .menu-item {
-            display: flex; align-items: center; gap: 10px;
-            width: 100%;
-            padding: 11px 14px;
-            border: none; background: transparent;
-            text-align: left;
-            cursor: pointer;
-            font: 500 .9rem 'Plus Jakarta Sans', sans-serif;
-            color: var(--text-main);
-            border-radius: 8px;
-            text-decoration: none;
-            transition: background .15s, color .15s;
-        }
-        .menu-item i {
-            color: var(--accent-gold);
-            width: 18px;
-            text-align: center;
-        }
-        .menu-item:hover {
-            background: #F7FAFC;
-            color: var(--primary-dark);
-        }
-
         /* Contenido Principal */
         .container {
             max-width: 850px;
@@ -299,43 +188,19 @@
 </head>
 <body>
 
-    <header>
-        <div>
-            <div class="brand-title">Agua del Corral</div>
-            <div class="brand-subtitle">Hotel & Spa • Mendoza</div>
-        </div>
-        <div class="header-right">
-            <div class="lang-switch" role="group" aria-label="Idioma">
-                <button class="lang-btn active" data-lang="es">ES</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="pt">PT</button>
-            </div>
-            
-            <div class="menu-wrap">
-                <button class="menu-toggle" id="menu-btn" aria-label="Menú principal"><i class="fa-solid fa-bars"></i></button>
-                <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="index.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> Mapa</a>
-                    <a href="servicios.html" class="menu-item"><i class="fa-solid fa-concierge-bell"></i> Servicios</a>
-                    <a href="spa.html" class="menu-item"><i class="fa-solid fa-spa"></i> Servicios Spa</a>
-                    <a href="tel:+5492612352727" class="menu-item"><i class="fa-solid fa-headset"></i> Contacto</a>
-                    <a href="blog.html" class="menu-item"><i class="fa-solid fa-book-open"></i> Blog</a>
-                    <a href="https://g.page/r/tu-enlace-de-google-reviews" target="_blank" rel="noopener noreferrer" class="menu-item"><i class="fa-solid fa-star"></i> Dejar reseña</a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <script src="menu.js"></script>
 
     <div class="container">
-        <a href="servicios.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Volver a Servicios Generales</a>
+        <a href="servicios.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Volver a Servicios Generales</span></a>
 
         <div class="page-heading">
-            <h1>Servicios Spa & Bienestar</h1>
-            <p>Tratamientos exclusivos diseñados para revitalizar cuerpo, mente y alma.</p>
+            <h1 data-i18n="h1">Servicios Spa & Bienestar</h1>
+            <p data-i18n="lead">Tratamientos exclusivos diseñados para revitalizar cuerpo, mente y alma.</p>
         </div>
 
         <!-- 15. Información del Spa -->
         <div class="info-card">
-            <h2><i class="fa-solid fa-circle-info"></i> 15. Información del Spa</h2>
+            <h2><i class="fa-solid fa-circle-info"></i> <span data-i18n="info_t">15. Información del Spa</span></h2>
             <p class="service-text" lang="es">A la hora de relajarse, permítase disfrutar de la experiencia que Agua del Corral Hotel & Spa tiene para ofrecer. El acceso al SPA es exclusivo para mayores de 18 años. Los tratamientos, masajes y el uso de los Jacuzzis son servicios con cargo adicional. Horario Spa: Todos los días de 9:00 hs. a 21:00 hs. Para consultas comunicarse al (0261) 4200035 interno 2007.</p>
             <p class="service-text" lang="en" style="display:none;">When it comes to relaxing, allow yourself to enjoy the experience that Agua del Corral Hotel & Spa has to offer. Access to the SPA is exclusive for over 18 years. The treatments, massages and use of the Jacuzzis are services with additional charges. Spa Hours: Every day from 9:00 hs. to 21:00 hs. For inquiries contact (0261) 4200035 internal 2007.</p>
             <p class="service-text" lang="pt" style="display:none;">Quando se trata de relaxar, aproveite a experiência que o Agua del Corral Hotel & Spa oferece. O acesso ao SPA é exclusivo há mais de 18 anos. Os tratamentos, massagens e uso de jacuzzis são serviços com custo adicional. Horário do spa: Todos os dias a partir das 9:00 hs. às 21:00 hs. Para mais informações, contacte (0261) 4200035 interno 2007.</p>
@@ -448,7 +313,7 @@
                 <div class="service-img-wrap"><img src="imagen10.jpg" alt="Spa de Manos" loading="lazy"></div>
                 <div class="service-content">
                     <h3>10. Spa de Manos</h3>
-                    <p class="service-text" lang="es">Es un servicio de manicuria, combinado con un tratamiento que protege y cuida la piel de las manos. Las manos son tu carta de presentación, por eso, para el esmaltado podrás elegir desde tonos puros y clásicos, hasta vanguardistas. Este tratamiento consiste en un masaje pulidor e hidratación de las manos, limado, extracción de cutículas, extracción de durezas, y esmaltado de uñas.</p>
+                    <p class="service-text" lang="es">Es un servicio de manicuria, combinado con un tratamiento que protege y cuida la piel de las manos. Las manos son su carta de presentación, por eso, para el esmaltado podrá elegir desde tonos puros y clásicos, hasta vanguardistas. Este tratamiento consiste en un masaje pulidor e hidratación de las manos, limado, extracción de cutículas, extracción de durezas, y esmaltado de uñas.</p>
                     <p class="service-text" lang="en" style="display:none;"><strong>Hand Spa:</strong> This is a manicure service, combined with a treatment that protects and takes care of the skin of the hands. The hands are your first introduction, so, as nail polish you can choose from pure and classic colors, to more avant-garde ones. This treatment consists of a massage and hydration of the hands, filing, removal of cuticles and calluses, and application of nail polish.</p>
                     <p class="service-text" lang="pt" style="display:none;"><strong>Spa de Mãos:</strong> É um serviço de manicure, combinado com um tratamento que protege e cuida da pele das mãos. As mãos são a carta de apresentação, por isso, para o esmaltado você poderá escolher de tons puros e clássicos até os vanguardistas. Este tratamento consiste em uma massagem de polimento e hidratação das mãos, lixamento, extração de durezas e esmaltação de unhas.</p>
                 </div>
@@ -459,7 +324,7 @@
                 <div class="service-img-wrap"><img src="imagen11.jpg" alt="Spa de Pies" loading="lazy"></div>
                 <div class="service-content">
                     <h3>11. Spa de Pies</h3>
-                    <p class="service-text" lang="es">Es un servicio de pedicuría, combinado con un tratamiento que protege y cuida la piel de los pies. Este tratamiento consiste en un masaje pulidor e hidratación de las pies, limado, extracción de cutículas, extracción de durezas, y esmaltado de uñas.</p>
+                    <p class="service-text" lang="es">Es un servicio de pedicuría, combinado con un tratamiento que protege y cuida la piel de los pies. Este tratamiento consiste en un masaje pulidor e hidratación de los pies, limado, extracción de cutículas, extracción de durezas, y esmaltado de uñas.</p>
                     <p class="service-text" lang="en" style="display:none;"><strong>Foot Spa:</strong> This is a pedicure service, combined with a treatment that protects and cares for the skin of the feet. This treatment consists of a massage and hydration of the feet, filing, cuticle and callus removal, and application of nail polish.</p>
                     <p class="service-text" lang="pt" style="display:none;"><strong>Spa de Pés:</strong> É um tratamento de pedicure combinado com um tratamento que protege e cuida da pele dos pés. Este tratamento consiste em uma massagem polidora e hidratação dos pés, lixamento, extração de durezas e esmaltação de unhas.</p>
                 </div>
@@ -506,31 +371,30 @@
     </footer>
 
     <script>
-        // Menú Hamburguesa
-        const menuBtn = document.getElementById('menu-btn');
-        const dropdownMenu = document.getElementById('dropdown-menu');
+        // Textos propios de esta página (el español sale del HTML)
+        AGC.i18n({
+            en: {
+                title: 'Spa Services - Hotel Agua del Corral',
+                back: 'Back to General Services',
+                h1: 'Spa & Wellness Services',
+                lead: 'Exclusive treatments designed to revitalize body, mind and soul.',
+                info_t: '15. Spa Information'
+            },
+            pt: {
+                title: 'Serviços de Spa - Hotel Agua del Corral',
+                back: 'Voltar aos Serviços Gerais',
+                h1: 'Serviços de Spa e Bem-estar',
+                lead: 'Tratamentos exclusivos desenhados para revitalizar corpo, mente e alma.',
+                info_t: '15. Informações do Spa'
+            }
+        });
 
-        menuBtn.onclick = e => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('open');
-        };
-
-        document.onclick = () => {
-            dropdownMenu.classList.remove('open');
-        };
-
-        // Cambio de Idioma Dinámico (ES / EN / PT)
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const lang = btn.dataset.lang;
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                document.querySelectorAll('[lang]').forEach(el => {
-                    if (el.tagName.toLowerCase() !== 'html') {
-                        el.style.display = el.getAttribute('lang') === lang ? 'block' : 'none';
-                    }
-                });
+        // Descripciones de tratamientos: se muestra solo el idioma activo
+        AGC.onLang(function (lang) {
+            document.querySelectorAll('[lang]').forEach(function (el) {
+                if (el.tagName.toLowerCase() !== 'html') {
+                    el.style.display = el.getAttribute('lang') === lang ? 'block' : 'none';
+                }
             });
         });
     </script>

@@ -37,117 +37,6 @@
             -webkit-text-size-adjust: 100%;
         }
 
-        /* ---------- Encabezado ---------- */
-        header {
-            background: linear-gradient(135deg, #111E2B 0%, var(--primary-dark) 100%);
-            color: #FFF;
-            padding: calc(12px + var(--safe-top)) calc(16px + var(--safe-right)) 12px calc(16px + var(--safe-left));
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,.15);
-            z-index: 3000;
-            border-bottom: 2px solid var(--accent-gold);
-            position: sticky;
-            top: 0;
-        }
-        .brand-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.05rem, 4vw, 1.4rem);
-            font-weight: 700;
-            letter-spacing: .5px;
-            line-height: 1.15;
-        }
-        .brand-subtitle {
-            font-size: clamp(.62rem, 2.4vw, .75rem);
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 600;
-            margin-top: 2px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .lang-switch {
-            display: flex;
-            background: rgba(255,255,255,.1);
-            border-radius: 999px;
-            padding: 3px;
-        }
-        .lang-btn {
-            border: none;
-            background: transparent;
-            color: #FFF;
-            font: 600 .75rem 'Plus Jakarta Sans', sans-serif;
-            padding: 7px 11px;
-            border-radius: 999px;
-            cursor: pointer;
-        }
-        .lang-btn.active { background: var(--accent-gold); color: #1A1A1A; }
-
-        /* ---------- Menú Hamburguesa ---------- */
-        .menu-wrap {
-            position: relative;
-            z-index: 4000;
-        }
-        .menu-toggle {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.2);
-            color: #FFF;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background .2s;
-        }
-        .menu-toggle:hover { background: rgba(255,255,255,.2); }
-
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            top: calc(100% + 8px);
-            background: #FFF;
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-            width: 220px;
-            padding: 8px;
-            display: none;
-            z-index: 9999;
-            animation: fadeIn .15s ease-out;
-        }
-        .dropdown-menu.open { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-
-        .menu-item {
-            display: flex; align-items: center; gap: 10px;
-            width: 100%;
-            padding: 11px 14px;
-            border: none; background: transparent;
-            text-align: left;
-            cursor: pointer;
-            font: 500 .9rem 'Plus Jakarta Sans', sans-serif;
-            color: var(--text-main);
-            border-radius: 8px;
-            text-decoration: none;
-            transition: background .15s, color .15s;
-        }
-        .menu-item i {
-            color: var(--accent-gold);
-            width: 18px;
-            text-align: center;
-        }
-        .menu-item:hover {
-            background: #F7FAFC;
-            color: var(--primary-dark);
-        }
-
         /* ---------- Contenido Principal ---------- */
         .container {
             max-width: 800px;
@@ -169,25 +58,17 @@
         }
         .nav-back:hover { color: var(--accent-gold); }
 
-        .page-heading {
-            margin-bottom: 24px;
-        }
+        .page-heading { margin-bottom: 24px; }
         .page-heading h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(1.6rem, 5vw, 2.2rem);
             color: var(--primary-dark);
             margin-bottom: 6px;
         }
-        .page-heading p {
-            color: #718096;
-            font-size: .95rem;
-        }
+        .page-heading p { color: #718096; font-size: .95rem; }
 
         /* ---------- Tarjetas de Sección ---------- */
-        .card-grid {
-            display: grid;
-            gap: 20px;
-        }
+        .card-grid { display: grid; gap: 20px; }
 
         .section-card {
             background: #FFF;
@@ -196,7 +77,6 @@
             box-shadow: var(--shadow-card);
             border-left: 4px solid var(--accent-gold);
         }
-
         .section-card h2 {
             font-family: 'Playfair Display', serif;
             font-size: 1.25rem;
@@ -206,20 +86,14 @@
             align-items: center;
             gap: 10px;
         }
-        .section-card h2 i {
-            color: var(--accent-gold);
-            font-size: 1.1rem;
-        }
+        .section-card h2 i { color: var(--accent-gold); font-size: 1.1rem; }
 
-        .info-list {
-            list-style: none;
-            display: grid;
-            gap: 10px;
-        }
+        .info-list { list-style: none; display: grid; gap: 10px; }
         .info-list li {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
             font-size: .92rem;
             padding-bottom: 8px;
             border-bottom: 1px solid #EDF2F7;
@@ -228,21 +102,12 @@
         .info-list span:first-child { color: #4A5568; font-weight: 500; }
         .info-list span:last-child { color: var(--primary-dark); font-weight: 600; text-align: right; }
 
-        .desc-text {
-            font-size: .92rem;
-            color: #4A5568;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
+        .desc-text { font-size: .92rem; color: #4A5568; line-height: 1.5; margin-bottom: 12px; }
 
         /* Botones de acción rápida en tarjetas */
-        .card-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 14px;
-        }
+        .card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
         .btn-action {
-            flex: 1;
+            flex: 1 1 160px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -257,13 +122,8 @@
             font-weight: 600;
             transition: all .2s;
         }
-        .btn-action:hover {
-            background: var(--primary-dark);
-            color: #FFF;
-            border-color: var(--primary-dark);
-        }
+        .btn-action:hover { background: var(--primary-dark); color: #FFF; border-color: var(--primary-dark); }
 
-        /* Footer sutil */
         footer {
             text-align: center;
             padding: 20px;
@@ -275,90 +135,81 @@
 </head>
 <body>
 
-    <header>
-        <div>
-            <div class="brand-title">Agua del Corral</div>
-            <div class="brand-subtitle">Hotel & Spa • Mendoza</div>
-        </div>
-        <div class="header-right">
-            <div class="lang-switch" role="group" aria-label="Idioma">
-                <button class="lang-btn active" data-lang="es">ES</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="pt">PT</button>
-            </div>
-            
-            <!-- Menú Hamburguesa -->
-            <div class="menu-wrap">
-                <button class="menu-toggle" id="menu-btn" aria-label="Menú principal"><i class="fa-solid fa-bars"></i></button>
-                <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="index.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> Mapa</a>
-                    <a href="servicios.html" class="menu-item"><i class="fa-solid fa-concierge-bell"></i> Servicios</a>
-                    <a href="spa.html" class="menu-item"><i class="fa-solid fa-spa"></i> Servicios Spa</a>
-                    <a href="tel:+5492612352727" class="menu-item"><i class="fa-solid fa-headset"></i> Contacto</a>
-                    <a href="blog.html" class="menu-item"><i class="fa-solid fa-book-open"></i> Blog</a>
-                    <a href="https://g.page/r/tu-enlace-de-google-reviews" target="_blank" rel="noopener noreferrer" class="menu-item"><i class="fa-solid fa-star"></i> Dejar reseña</a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <script src="menu.js"></script>
 
     <div class="container">
-        <a href="index.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Volver al Mapa Interactivo</a>
+        <a href="index.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Volver al Mapa Interactivo</span></a>
 
         <div class="page-heading">
-            <h1>Guía de Servicios & Info</h1>
-            <p>Todo lo que necesitas saber para disfrutar al máximo tu estadía con nosotros.</p>
+            <h1 data-i18n="h1">Guía de Servicios & Info</h1>
+            <p data-i18n="lead">Todo lo que necesita saber para disfrutar al máximo su estadía con nosotros.</p>
         </div>
 
         <div class="card-grid">
-            
+
             <!-- Horarios y Estancia -->
             <div class="section-card">
-                <h2><i class="fa-solid fa-clock"></i> Horarios de Estancia</h2>
+                <h2><i class="fa-solid fa-clock"></i> <span data-i18n="c1_t">Horarios de Estancia</span></h2>
                 <ul class="info-list">
-                    <li><span>Check-in (Ingreso)</span><span>15:00 hs</span></li>
-                    <li><span>Check-out (Salida)</span><span>12:00 hs</span></li>
-                    <li><span>Desayuno Buffet</span><span>07:00 a 10:00 hs - 9º Piso</span></li>
-                    <li><span>Recepción y Conserjería</span><span>24 Horas</span></li>
+                    <li><span data-i18n="l_in">Check-in (Ingreso)</span><span>15:00 hs</span></li>
+                    <li><span data-i18n="l_out">Check-out (Salida)</span><span>12:00 hs</span></li>
+                    <li><span data-i18n="l_bf">Desayuno Buffet</span><span data-i18n="v_bf">07:00 a 10:00 hs - 9º Piso</span></li>
+                    <li><span data-i18n="l_rec">Recepción y Conserjería</span><span data-i18n="v_rec">24 Horas</span></li>
                 </ul>
             </div>
 
             <!-- Spa & Bienestar -->
             <div class="section-card">
-                <h2><i class="fa-solid fa-spa"></i> Spa & Bienestar</h2>
-                <p class="desc-text">Relájate en nuestras instalaciones exclusivas. Contamos con sesiones de masajes descontracturantes, relajantes y nuestra revitalizante <strong>ducha escocesa</strong> (consultar turnos disponibles en recepción).</p>
+                <h2><i class="fa-solid fa-spa"></i> <span data-i18n="c2_t">Spa & Bienestar</span></h2>
+                <p class="desc-text" data-i18n="spa_p">Relájese en nuestras instalaciones exclusivas. Contamos con sesiones de masajes descontracturantes, relajantes y nuestra revitalizante <strong>ducha escocesa</strong> (consulte los turnos disponibles en recepción).</p>
                 <ul class="info-list">
-                    <li><span>Horario del Spa</span><span>12:00 a 21:00 hs</span></li>
-                    <li><span>Reserva previa</span><span>Obligatoria (+54 9 2612 35-3032)</span></li>
+                    <li><span data-i18n="l_spa_h">Horario del Spa</span><span data-i18n="v_spa_h">12:00 a 21:00 hs</span></li>
+                    <li><span data-i18n="l_spa_r">Reserva previa</span><span data-i18n="v_spa_r">Obligatoria (+54 9 2612 35-3032)</span></li>
                 </ul>
                 <div class="card-actions">
-                    <a href="spa.html" class="btn-action"><i class="fa-solid fa-spa"></i> Ver Catálogo Spa</a>
-                    <a href="https://wa.me/5492612353032?text=Hola%2C%20quisiera%20reservar%20turno%20para%20Spa" class="btn-action"><i class="fa-solid fa-phone"></i> Reservar Turno</a>
+                    <a href="spa.html" class="btn-action"><i class="fa-solid fa-spa"></i> <span data-i18n="b_spa">Ver Catálogo Spa</span></a>
+                    <a href="https://wa.me/5492612353032?text=Hola%2C%20quisiera%20reservar%20turno%20para%20Spa" class="btn-action"><i class="fa-brands fa-whatsapp"></i> <span data-i18n="b_book">Reservar Turno</span></a>
+                </div>
+            </div>
+
+            <!-- Desayuno Buffet -->
+            <div class="section-card">
+                <h2><i class="fa-solid fa-mug-hot"></i> <span data-i18n="c_bf_t">Desayuno Buffet</span></h2>
+                <p class="desc-text" data-i18n="bf_p">Comience el día con un desayuno buffet variado y fresco: panadería artesanal, las clásicas <em>tortitas mendocinas</em>, frutas de estación, jugos naturales, huevos revueltos preparados en el momento y mucho más. Todo el servicio es asistido por nuestro personal.</p>
+                <ul class="info-list">
+                    <li><span data-i18n="l_bf_h">Horario</span><span data-i18n="v_bf_h">07:00 a 10:00 hs</span></li>
+                    <li><span data-i18n="l_bf_p">Ubicación</span><span data-i18n="v_bf_p">9º Piso</span></li>
+                </ul>
+                <div class="card-actions">
+                    <a href="restaurante.html#desayuno" class="btn-action"><i class="fa-solid fa-mug-hot"></i> <span data-i18n="b_bf">Ver Desayuno Buffet</span></a>
                 </div>
             </div>
 
             <!-- Restaurante & Gastronomía -->
             <div class="section-card">
-                <h2><i class="fa-solid fa-utensils"></i> Restaurante & Bar</h2>
-                <p class="desc-text">Disfruta de la alta cocina regional y los mejores vinos de Mendoza sin moverte del hotel. Servicio a la carta, picadas regionales y coctelería de autor.</p>
+                <h2><i class="fa-solid fa-utensils"></i> <span data-i18n="c3_t">Restaurante & Bar</span></h2>
+                <p class="desc-text" data-i18n="rest_p">Disfrute de la alta cocina regional y de los mejores vinos de Mendoza sin salir del hotel. Servicio a la carta, picadas regionales y coctelería de autor.</p>
                 <ul class="info-list">
-                    <li><span>Almuerzo / Cena</span><span>12:30 a 21:00 hs</span></li>
-                    <li><span>Room Service</span><span>Disponible hasta las 21:00 hs</span></li>
+                    <li><span data-i18n="l_meal">Almuerzo / Cena</span><span data-i18n="v_meal">12:30 a 21:00 hs</span></li>
+                    <li><span data-i18n="l_room">Room Service</span><span data-i18n="v_room">Disponible hasta las 21:00 hs</span></li>
                 </ul>
+                <div class="card-actions">
+                    <a href="restaurante.html#restaurante" class="btn-action"><i class="fa-solid fa-utensils"></i> <span data-i18n="b_rest">Ver Restaurante y Carta</span></a>
+                </div>
             </div>
 
             <!-- Contacto Directo -->
             <div class="section-card">
-                <h2><i class="fa-solid fa-headset"></i> Contacto Directo</h2>
-                <p class="desc-text">¿Necesitas asistencia con tu equipaje, transporte, excursiones a alta montaña o reservas? Comunícate directamente con nuestro equipo.</p>
+                <h2><i class="fa-solid fa-headset"></i> <span data-i18n="c4_t">Contacto Directo</span></h2>
+                <p class="desc-text" data-i18n="contact_p">¿Necesita asistencia con su equipaje, transporte, excursiones a alta montaña o reservas? Comuníquese directamente con nuestro equipo.</p>
                 <ul class="info-list">
-                    <li><span>Recepción (Desde la habitación)</span><span>Marcar 2901</span></li>
-                    <li><span>Teléfono Principal</span><span>+54 9 2612 35-2727</span></li>
-                    <li><span>Correo Electrónico</span><span>reservas@supehturismo.com.ar</span></li>
+                    <li><span data-i18n="l_ext">Recepción (Desde la habitación)</span><span data-i18n="v_ext">Marcar 2901</span></li>
+                    <li><span data-i18n="l_tel">Teléfono Principal</span><span>+54 9 2612 35-2727</span></li>
+                    <li><span data-i18n="l_mail">Correo Electrónico</span><span>reservas@supehturismo.com.ar</span></li>
                 </ul>
                 <div class="card-actions">
-                    <a href="tel:+5492612352727" class="btn-action"><i class="fa-solid fa-phone"></i> Llamar a Recepción</a>
-                    <a href="mailto:reservas@supehturismo.com.ar" class="btn-action"><i class="fa-solid fa-envelope"></i> Enviar Email</a>
+                    <a href="tel:+5492612352727" class="btn-action"><i class="fa-solid fa-phone"></i> <span data-i18n="b_call">Llamar a Recepción</span></a>
+                    <a href="mailto:reservas@supehturismo.com.ar" class="btn-action"><i class="fa-solid fa-envelope"></i> <span data-i18n="b_mail">Enviar Email</span></a>
                 </div>
             </div>
 
@@ -370,25 +221,67 @@
     </footer>
 
     <script>
-        // Control de Menú Hamburguesa
-        const menuBtn = document.getElementById('menu-btn');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-
-        menuBtn.onclick = e => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('open');
-        };
-
-        document.onclick = () => {
-            dropdownMenu.classList.remove('open');
-        };
-
-        // Sincronización básica de idioma simulada para la botonera
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
+        AGC.i18n({
+            en: {
+                title: 'Services & Info - Hotel Agua del Corral',
+                back: 'Back to the Interactive Map',
+                h1: 'Services & Information Guide',
+                lead: 'Everything you need to know to make the most of your stay with us.',
+                c1_t: 'Hours of Stay',
+                l_in: 'Check-in (Arrival)', l_out: 'Check-out (Departure)',
+                l_bf: 'Buffet Breakfast', v_bf: '07:00 to 10:00 hs - 9th Floor',
+                l_rec: 'Reception & Concierge', v_rec: '24 Hours',
+                b_bf: 'View Buffet Breakfast',
+                c_bf_t: 'Buffet Breakfast',
+                bf_p: 'Start your day with a varied, fresh breakfast buffet: artisan bakery, the classic <em>tortitas mendocinas</em>, seasonal fruit, natural juices, scrambled eggs prepared to order and much more. The entire service is attended by our staff.',
+                l_bf_h: 'Hours', v_bf_h: '07:00 to 10:00 hs',
+                l_bf_p: 'Location', v_bf_p: '9th Floor',
+                c2_t: 'Spa & Wellness',
+                spa_p: 'Unwind in our exclusive facilities. We offer decontracting and relaxing massage sessions, as well as our revitalizing <strong>Scotch shower</strong> (please ask at reception for available times).',
+                l_spa_h: 'Spa Hours', v_spa_h: '12:00 to 21:00 hs',
+                l_spa_r: 'Advance booking', v_spa_r: 'Required (+54 9 2612 35-3032)',
+                b_spa: 'View Spa Catalog', b_book: 'Book an Appointment',
+                c3_t: 'Restaurant & Bar',
+                rest_p: 'Enjoy fine regional cuisine and the best wines of Mendoza without leaving the hotel. À la carte service, regional charcuterie platters and signature cocktails.',
+                l_meal: 'Lunch / Dinner', v_meal: '12:30 to 21:00 hs',
+                l_room: 'Room Service', v_room: 'Available until 21:00 hs',
+                b_rest: 'View Restaurant & Menu',
+                c4_t: 'Direct Contact',
+                contact_p: 'Do you need assistance with your luggage, transport, high-mountain excursions or reservations? Please contact our team directly.',
+                l_ext: 'Reception (from your room)', v_ext: 'Dial 2901',
+                l_tel: 'Main Phone', l_mail: 'Email',
+                b_call: 'Call Reception', b_mail: 'Send Email'
+            },
+            pt: {
+                title: 'Serviços e Informações - Hotel Agua del Corral',
+                back: 'Voltar ao Mapa Interativo',
+                h1: 'Guia de Serviços e Informações',
+                lead: 'Tudo o que precisa saber para aproveitar ao máximo a sua estadia conosco.',
+                c1_t: 'Horários da Estadia',
+                l_in: 'Check-in (Entrada)', l_out: 'Check-out (Saída)',
+                l_bf: 'Café da Manhã Buffet', v_bf: '07:00 às 10:00 hs - 9º Andar',
+                l_rec: 'Recepção e Concierge', v_rec: '24 Horas',
+                b_bf: 'Ver Café da Manhã Buffet',
+                c_bf_t: 'Café da Manhã Buffet',
+                bf_p: 'Comece o dia com um café da manhã buffet variado e fresco: padaria artesanal, as clássicas <em>tortitas mendocinas</em>, frutas da estação, sucos naturais, ovos mexidos preparados na hora e muito mais. Todo o serviço é assistido por nossa equipe.',
+                l_bf_h: 'Horário', v_bf_h: '07:00 às 10:00 hs',
+                l_bf_p: 'Local', v_bf_p: '9º Andar',
+                c2_t: 'Spa e Bem-estar',
+                spa_p: 'Relaxe em nossas instalações exclusivas. Contamos com sessões de massagens descontraturantes, relaxantes e nossa revigorante <strong>ducha escocesa</strong> (consulte os horários disponíveis na recepção).',
+                l_spa_h: 'Horário do Spa', v_spa_h: '12:00 às 21:00 hs',
+                l_spa_r: 'Reserva prévia', v_spa_r: 'Obrigatória (+54 9 2612 35-3032)',
+                b_spa: 'Ver Catálogo do Spa', b_book: 'Reservar Horário',
+                c3_t: 'Restaurante e Bar',
+                rest_p: 'Desfrute da alta cozinha regional e dos melhores vinhos de Mendoza sem sair do hotel. Serviço à la carte, tábuas regionais e coquetelaria de autor.',
+                l_meal: 'Almoço / Jantar', v_meal: '12:30 às 21:00 hs',
+                l_room: 'Room Service', v_room: 'Disponível até às 21:00 hs',
+                b_rest: 'Ver Restaurante e Cardápio',
+                c4_t: 'Contato Direto',
+                contact_p: 'Precisa de assistência com bagagem, transporte, excursões à alta montanha ou reservas? Entre em contato diretamente com a nossa equipe.',
+                l_ext: 'Recepção (do quarto)', v_ext: 'Discar 2901',
+                l_tel: 'Telefone Principal', l_mail: 'E-mail',
+                b_call: 'Ligar para a Recepção', b_mail: 'Enviar E-mail'
+            }
         });
     </script>
 </body>

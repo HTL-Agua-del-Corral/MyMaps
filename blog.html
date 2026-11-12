@@ -37,117 +37,6 @@
             -webkit-text-size-adjust: 100%;
         }
 
-        /* ---------- Encabezado idéntico con z-index alto ---------- */
-        header {
-            background: linear-gradient(135deg, #111E2B 0%, var(--primary-dark) 100%);
-            color: #FFF;
-            padding: calc(12px + var(--safe-top)) calc(16px + var(--safe-right)) 12px calc(16px + var(--safe-left));
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,.15);
-            z-index: 3000;
-            border-bottom: 2px solid var(--accent-gold);
-            position: sticky;
-            top: 0;
-        }
-        .brand-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.05rem, 4vw, 1.4rem);
-            font-weight: 700;
-            letter-spacing: .5px;
-            line-height: 1.15;
-        }
-        .brand-subtitle {
-            font-size: clamp(.62rem, 2.4vw, .75rem);
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 600;
-            margin-top: 2px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .lang-switch {
-            display: flex;
-            background: rgba(255,255,255,.1);
-            border-radius: 999px;
-            padding: 3px;
-        }
-        .lang-btn {
-            border: none;
-            background: transparent;
-            color: #FFF;
-            font: 600 .75rem 'Plus Jakarta Sans', sans-serif;
-            padding: 7px 11px;
-            border-radius: 999px;
-            cursor: pointer;
-        }
-        .lang-btn.active { background: var(--accent-gold); color: #1A1A1A; }
-
-        /* ---------- Menú Hamburguesa ---------- */
-        .menu-wrap {
-            position: relative;
-            z-index: 4000;
-        }
-        .menu-toggle {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.2);
-            color: #FFF;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background .2s;
-        }
-        .menu-toggle:hover { background: rgba(255,255,255,.2); }
-
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            top: calc(100% + 8px);
-            background: #FFF;
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-            width: 220px;
-            padding: 8px;
-            display: none;
-            z-index: 9999;
-            animation: fadeIn .15s ease-out;
-        }
-        .dropdown-menu.open { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-
-        .menu-item {
-            display: flex; align-items: center; gap: 10px;
-            width: 100%;
-            padding: 11px 14px;
-            border: none; background: transparent;
-            text-align: left;
-            cursor: pointer;
-            font: 500 .9rem 'Plus Jakarta Sans', sans-serif;
-            color: var(--text-main);
-            border-radius: 8px;
-            text-decoration: none;
-            transition: background .15s, color .15s;
-        }
-        .menu-item i {
-            color: var(--accent-gold);
-            width: 18px;
-            text-align: center;
-        }
-        .menu-item:hover {
-            background: #F7FAFC;
-            color: var(--primary-dark);
-        }
-
         /* ---------- Contenido Principal ---------- */
         .container {
             max-width: 800px;
@@ -169,25 +58,17 @@
         }
         .nav-back:hover { color: var(--accent-gold); }
 
-        .page-heading {
-            margin-bottom: 24px;
-        }
+        .page-heading { margin-bottom: 24px; }
         .page-heading h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(1.6rem, 5vw, 2.2rem);
             color: var(--primary-dark);
             margin-bottom: 6px;
         }
-        .page-heading p {
-            color: #718096;
-            font-size: .95rem;
-        }
+        .page-heading p { color: #718096; font-size: .95rem; }
 
         /* ---------- Artículos del Blog ---------- */
-        .blog-grid {
-            display: grid;
-            gap: 24px;
-        }
+        .blog-grid { display: grid; gap: 24px; }
 
         .blog-card {
             background: #FFF;
@@ -197,13 +78,9 @@
             border-top: 4px solid var(--accent-gold);
             transition: transform .2s;
         }
-        .blog-card:hover {
-            transform: translateY(-2px);
-        }
+        .blog-card:hover { transform: translateY(-2px); }
 
-        .blog-content {
-            padding: 24px;
-        }
+        .blog-content { padding: 24px; }
 
         .blog-date {
             font-size: .78rem;
@@ -223,12 +100,7 @@
             line-height: 1.3;
         }
 
-        .blog-excerpt {
-            font-size: .92rem;
-            color: #4A5568;
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
+        .blog-excerpt { font-size: .92rem; color: #4A5568; line-height: 1.6; margin-bottom: 16px; }
 
         .blog-footer {
             display: flex;
@@ -248,11 +120,8 @@
             align-items: center;
             gap: 6px;
         }
-        .read-more:hover {
-            color: var(--accent-gold);
-        }
+        .read-more:hover { color: var(--accent-gold); }
 
-        /* Footer sutil */
         footer {
             text-align: center;
             padding: 20px;
@@ -264,51 +133,27 @@
 </head>
 <body>
 
-    <header>
-        <div>
-            <div class="brand-title">Agua del Corral</div>
-            <div class="brand-subtitle">Hotel & Spa • Mendoza</div>
-        </div>
-        <div class="header-right">
-            <div class="lang-switch" role="group" aria-label="Idioma">
-                <button class="lang-btn active" data-lang="es">ES</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="pt">PT</button>
-            </div>
-            
-            <!-- Menú Hamburguesa Desplegable -->
-            <div class="menu-wrap">
-                <button class="menu-toggle" id="menu-btn" aria-label="Menú principal"><i class="fa-solid fa-bars"></i></button>
-                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="index.html" class="menu-item"><i class="fa-solid fa-location-dot"></i> Mapa</a>
-                    <a href="servicios.html" class="menu-item"><i class="fa-solid fa-concierge-bell"></i> Servicios</a>
-                    <a href="tel:+5492614000000" class="menu-item"><i class="fa-solid fa-headset"></i> Contacto</a>
-                    <a href="blog.html" class="menu-item"><i class="fa-solid fa-book-open"></i> Blog</a>
-                    <a href="https://g.page/r/tu-enlace-de-google-reviews" target="_blank" rel="noopener noreferrer" class="menu-item"><i class="fa-solid fa-star"></i> Dejar reseña</a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <script src="menu.js"></script>
 
     <div class="container">
-        <a href="index.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Volver al Mapa Interactivo</a>
+        <a href="index.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Volver al Mapa Interactivo</span></a>
 
         <div class="page-heading">
-            <h1>Blog & Experiencias</h1>
-            <p>Descubre historias, recomendaciones de bodegas, cultura mendocina y secretos de nuestra región.</p>
+            <h1 data-i18n="h1">Blog & Experiencias</h1>
+            <p data-i18n="lead">Descubra historias, recomendaciones de bodegas, cultura mendocina y secretos de nuestra región.</p>
         </div>
 
         <div class="blog-grid">
-            
+
             <!-- Artículo 1 -->
             <article class="blog-card">
                 <div class="blog-content">
-                    <span class="blog-date"><i class="fa-regular fa-calendar"></i> 15 de Octubre, 2026</span>
-                    <h2>Los Mejores Rincones del Microcentro Mendocino a Pocos Pasos del Hotel</h2>
-                    <p class="blog-excerpt">Hospedarte en calle Amigorena te deja en el corazón neurálgico de la ciudad. Te contamos cuáles son los paseos peatonales, cafés históricos y plazas arboladas imperdibles que puedes recorrer caminando sin apuros.</p>
+                    <span class="blog-date"><i class="fa-regular fa-calendar"></i> <span data-i18n="d1">15 de Octubre, 2026</span></span>
+                    <h2 data-i18n="t1">Los Mejores Rincones del Microcentro Mendocino a Pocos Pasos del Hotel</h2>
+                    <p class="blog-excerpt" data-i18n="e1">Hospedarse en calle Amigorena lo deja en el corazón neurálgico de la ciudad. Le contamos cuáles son los paseos peatonales, cafés históricos y plazas arboladas imperdibles que puede recorrer caminando sin apuros.</p>
                     <div class="blog-footer">
-                        <span><i class="fa-regular fa-clock"></i> 4 min de lectura</span>
-                        <a href="#" class="read-more" onclick="alert('Artículo completo próximamente'); return false;">Leer artículo <i class="fa-solid fa-arrow-right"></i></a>
+                        <span><i class="fa-regular fa-clock"></i> <span data-i18n="r1">4 min de lectura</span></span>
+                        <a href="#" class="read-more" onclick="alert(AGC.t('soon')); return false;"><span data-i18n="read">Leer artículo</span> <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </article>
@@ -316,12 +161,12 @@
             <!-- Artículo 2 -->
             <article class="blog-card">
                 <div class="blog-content">
-                    <span class="blog-date"><i class="fa-regular fa-calendar"></i> 02 de Octubre, 2026</span>
-                    <h2>Guía Esencial: Cómo Planificar tu Visita a Bodegas en Mendoza</h2>
-                    <p class="blog-excerpt">¿Viajas a Mendoza y quieres recorrer los Caminos del Vino? Consejos clave sobre distancias, contratación de traslados seguros desde la puerta del hotel y qué tener en cuenta al visitar bodegas en Luján de Cuyo y el Valle de Uco.</p>
+                    <span class="blog-date"><i class="fa-regular fa-calendar"></i> <span data-i18n="d2">02 de Octubre, 2026</span></span>
+                    <h2 data-i18n="t2">Guía Esencial: Cómo Planificar su Visita a Bodegas en Mendoza</h2>
+                    <p class="blog-excerpt" data-i18n="e2">¿Viaja a Mendoza y desea recorrer los Caminos del Vino? Consejos clave sobre distancias, contratación de traslados seguros desde la puerta del hotel y qué tener en cuenta al visitar bodegas en Luján de Cuyo y el Valle de Uco.</p>
                     <div class="blog-footer">
-                        <span><i class="fa-regular fa-clock"></i> 6 min de lectura</span>
-                        <a href="#" class="read-more" onclick="alert('Artículo completo próximamente'); return false;">Leer artículo <i class="fa-solid fa-arrow-right"></i></a>
+                        <span><i class="fa-regular fa-clock"></i> <span data-i18n="r2">6 min de lectura</span></span>
+                        <a href="#" class="read-more" onclick="alert(AGC.t('soon')); return false;"><span data-i18n="read2">Leer artículo</span> <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </article>
@@ -329,12 +174,12 @@
             <!-- Artículo 3 -->
             <article class="blog-card">
                 <div class="blog-content">
-                    <span class="blog-date"><i class="fa-regular fa-calendar"></i> 20 de Septiembre, 2026</span>
-                    <h2>Relax en la Ciudad: Beneficios de una Sesión de Ducha Escocesa y Masajes</h2>
-                    <p class="blog-excerpt">Después de una larga caminata por la precordillera o un día de excursiones, relajar el cuerpo es fundamental. Descubre cómo nuestras terapias de bienestar en el spa del hotel ayudan a renovar energías.</p>
+                    <span class="blog-date"><i class="fa-regular fa-calendar"></i> <span data-i18n="d3">20 de Septiembre, 2026</span></span>
+                    <h2 data-i18n="t3">Relax en la Ciudad: Beneficios de una Sesión de Ducha Escocesa y Masajes</h2>
+                    <p class="blog-excerpt" data-i18n="e3">Después de una larga caminata por la precordillera o un día de excursiones, relajar el cuerpo es fundamental. Descubra cómo nuestras terapias de bienestar en el spa del hotel ayudan a renovar energías.</p>
                     <div class="blog-footer">
-                        <span><i class="fa-regular fa-clock"></i> 3 min de lectura</span>
-                        <a href="#" class="read-more" onclick="alert('Artículo completo próximamente'); return false;">Leer artículo <i class="fa-solid fa-arrow-right"></i></a>
+                        <span><i class="fa-regular fa-clock"></i> <span data-i18n="r3">3 min de lectura</span></span>
+                        <a href="#" class="read-more" onclick="alert(AGC.t('soon')); return false;"><span data-i18n="read3">Leer artículo</span> <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </article>
@@ -347,25 +192,40 @@
     </footer>
 
     <script>
-        // Control de Menú Hamburguesa
-        const menuBtn = document.getElementById('menu-btn');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-
-        menuBtn.onclick = e => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('open');
-        };
-
-        document.onclick = () => {
-            dropdownMenu.classList.remove('open');
-        };
-
-        // Sincronización básica de idioma simulada para la botonera
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
+        AGC.i18n({
+            es: { soon: 'Artículo completo próximamente' },
+            en: {
+                soon: 'Full article coming soon',
+                title: 'Blog & News - Hotel Agua del Corral',
+                back: 'Back to the Interactive Map',
+                h1: 'Blog & Experiences',
+                lead: 'Discover stories, winery recommendations, Mendoza culture and the secrets of our region.',
+                d1: 'October 15, 2026', d2: 'October 2, 2026', d3: 'September 20, 2026',
+                t1: 'The Best Corners of Downtown Mendoza, Just Steps from the Hotel',
+                e1: 'Staying on Amigorena Street places you in the very heart of the city. Allow us to share the pedestrian walkways, historic cafés and tree-lined squares not to be missed, all within easy walking distance.',
+                t2: 'Essential Guide: How to Plan Your Visit to Wineries in Mendoza',
+                e2: 'Traveling to Mendoza and wishing to explore the Wine Roads? Key advice on distances, arranging safe transfers from the hotel door, and what to keep in mind when visiting wineries in Luján de Cuyo and the Uco Valley.',
+                t3: 'Relaxation in the City: Benefits of a Scotch Shower and Massage Session',
+                e3: 'After a long walk through the foothills or a day of excursions, relaxing the body is essential. Discover how the wellness therapies at our hotel spa help renew your energy.',
+                r1: '4 min read', r2: '6 min read', r3: '3 min read',
+                read: 'Read article', read2: 'Read article', read3: 'Read article'
+            },
+            pt: {
+                soon: 'Artigo completo em breve',
+                title: 'Blog e Novidades - Hotel Agua del Corral',
+                back: 'Voltar ao Mapa Interativo',
+                h1: 'Blog e Experiências',
+                lead: 'Descubra histórias, recomendações de vinícolas, a cultura mendocina e os segredos da nossa região.',
+                d1: '15 de outubro de 2026', d2: '2 de outubro de 2026', d3: '20 de setembro de 2026',
+                t1: 'Os Melhores Recantos do Centro de Mendoza, a Poucos Passos do Hotel',
+                e1: 'Hospedar-se na rua Amigorena coloca os hóspedes no coração pulsante da cidade. Apresentamos os passeios de pedestres, cafés históricos e praças arborizadas imperdíveis que podem ser percorridos a pé, sem pressa.',
+                t2: 'Guia Essencial: Como Planejar a Visita às Vinícolas de Mendoza',
+                e2: 'Viaja a Mendoza e deseja percorrer os Caminhos do Vinho? Conselhos essenciais sobre distâncias, contratação de traslados seguros desde a porta do hotel e o que considerar ao visitar vinícolas em Luján de Cuyo e no Vale de Uco.',
+                t3: 'Relax na Cidade: Benefícios de uma Sessão de Ducha Escocesa e Massagens',
+                e3: 'Após uma longa caminhada pela pré-cordilheira ou um dia de excursões, relaxar o corpo é fundamental. Descubra como as terapias de bem-estar do spa do hotel ajudam a renovar as energias.',
+                r1: '4 min de leitura', r2: '6 min de leitura', r3: '3 min de leitura',
+                read: 'Ler artigo', read2: 'Ler artigo', read3: 'Ler artigo'
+            }
         });
     </script>
 </body>

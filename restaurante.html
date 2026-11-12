@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1A2B3C">
+    <title>Desayuno y Restaurante - Hotel Agua del Corral</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --primary-dark: #1A2B3C;
+            --accent-gold: #C5A059;
+            --bg-light: #F8F9FA;
+            --text-main: #2D3748;
+            --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* ---------- Contenido Principal ---------- */
+        .container {
+            max-width: 850px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px calc(16px + var(--safe-right)) calc(40px + var(--safe-bottom)) calc(16px + var(--safe-left));
+            flex: 1;
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .88rem;
+            margin-bottom: 20px;
+        }
+        .nav-back:hover { color: var(--accent-gold); }
+
+        .page-heading { margin-bottom: 24px; }
+        .page-heading h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+        .page-heading p { color: #718096; font-size: .95rem; }
+
+        /* ---------- Índice inicial ---------- */
+        .index-grid {
+            display: grid;
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+        @media (min-width: 600px) { .index-grid { grid-template-columns: 1fr 1fr; } }
+
+        .index-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #FFF;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: var(--shadow-card);
+            border-left: 4px solid var(--accent-gold);
+            text-decoration: none;
+            color: inherit;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .index-card:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,.12); }
+        .index-card .ic {
+            flex: 0 0 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary-dark);
+            color: var(--accent-gold);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.15rem;
+        }
+        .index-card .it { flex: 1; min-width: 0; }
+        .index-card .it strong {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: var(--primary-dark);
+            margin-bottom: 2px;
+        }
+        .index-card .it small { color: #718096; font-size: .82rem; }
+        .index-card .go { color: var(--accent-gold); }
+
+        /* ---------- Barra de secciones (aparece al desplazarse) ---------- */
+        .subnav {
+            position: fixed;
+            top: var(--agc-header-h, 64px);
+            left: 0; right: 0;
+            z-index: 2500;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,.96);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid #E2E8F0;
+            box-shadow: 0 4px 14px rgba(0,0,0,.06);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: opacity .2s, transform .2s, visibility .2s;
+        }
+        .subnav.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .subnav a {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            border: 1px solid #E2E8F0;
+            background: #F7FAFC;
+            color: var(--primary-dark);
+            font-size: .85rem; font-weight: 600;
+            text-decoration: none;
+            transition: all .2s;
+        }
+        .subnav a i { color: var(--accent-gold); }
+        .subnav a.active { background: var(--primary-dark); border-color: var(--primary-dark); color: #FFF; }
+
+        /* ---------- Secciones ---------- */
+        .block {
+            margin-bottom: 40px;
+            scroll-margin-top: calc(var(--agc-header-h, 64px) + 60px);
+        }
+        .block-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 4.5vw, 1.8rem);
+            color: var(--primary-dark);
+            display: flex; align-items: center; gap: 12px;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+        .block-title i { color: var(--accent-gold); font-size: 1.2rem; }
+
+        .section-card {
+            background: #FFF;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: var(--shadow-card);
+            border-left: 4px solid var(--accent-gold);
+            margin-bottom: 20px;
+        }
+        .section-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        .section-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            margin: 18px 0 12px;
+        }
+        .desc-text { font-size: .92rem; color: #4A5568; line-height: 1.6; margin-bottom: 12px; }
+        .desc-text:last-child { margin-bottom: 0; }
+
+        .feature-list { list-style: none; display: grid; gap: 14px; }
+        .feature-list li {
+            display: flex; gap: 12px; align-items: flex-start;
+            font-size: .92rem; color: #4A5568; line-height: 1.55;
+        }
+        .feature-list .f-ic {
+            flex: 0 0 34px; height: 34px; border-radius: 50%;
+            background: #FBF5E8; color: var(--accent-gold);
+            display: flex; align-items: center; justify-content: center;
+            font-size: .9rem;
+        }
+        .feature-list strong { color: var(--primary-dark); }
+
+        .info-list { list-style: none; display: grid; gap: 10px; }
+        .info-list li {
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
+            font-size: .92rem;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #EDF2F7;
+        }
+        .info-list li:last-child { border-bottom: none; padding-bottom: 0; }
+        .info-list span:first-child { color: #4A5568; font-weight: 500; }
+        .info-list span:last-child { color: var(--primary-dark); font-weight: 600; text-align: right; }
+
+        .card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+        .btn-action {
+            flex: 1 1 200px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: #F7FAFC; color: var(--primary-dark);
+            border: 1px solid #E2E8F0;
+            padding: 11px 12px; border-radius: 10px;
+            text-decoration: none; font-size: .85rem; font-weight: 600;
+            transition: all .2s;
+        }
+        .btn-action:hover { background: var(--primary-dark); color: #FFF; border-color: var(--primary-dark); }
+        .btn-action.primary { background: linear-gradient(135deg, var(--accent-gold) 0%, #A37F38 100%); color: #FFF; border-color: transparent; }
+        .btn-action.primary:hover { filter: brightness(.95); background: linear-gradient(135deg, var(--accent-gold) 0%, #A37F38 100%); }
+
+        /* ---------- Carrusel ---------- */
+        .gallery-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+        .gallery-head h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--primary-dark); }
+        .gallery-head small { color: #718096; font-size: .8rem; }
+
+        .carousel { position: relative; }
+        .car-track {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            padding: 2px 2px 6px;
+            border-radius: 14px;
+        }
+        .car-track::-webkit-scrollbar { display: none; }
+        .car-track:focus-visible { outline: 3px solid rgba(197,160,89,.5); outline-offset: 2px; }
+
+        .slide { flex: 0 0 84%; scroll-snap-align: start; margin: 0; }
+        @media (min-width: 700px) { .slide { flex-basis: calc((100% - 12px) / 2); } }
+
+        .slide-btn {
+            position: relative;
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            border: none; padding: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #E8EEF2;
+            cursor: zoom-in;
+            box-shadow: var(--shadow-card);
+        }
+        .slide-btn img {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform .4s;
+        }
+        .slide-btn:hover img { transform: scale(1.04); }
+        .slide-btn .zoom {
+            position: absolute; right: 10px; bottom: 10px;
+            width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(26,43,60,.75); color: #FFF;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .85rem; pointer-events: none;
+        }
+        .slide .ph {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            color: #A0AEC0; font-size: 1.8rem;
+        }
+        .slide .ph small { font-size: .72rem; letter-spacing: .5px; }
+        .slide.broken .slide-btn { cursor: default; pointer-events: none; }
+        .slide.broken .zoom { display: none; }
+
+        .car-arrow {
+            position: absolute; top: calc(50% - 20px);
+            width: 40px; height: 40px; border-radius: 50%;
+            border: none; background: rgba(255,255,255,.95); color: var(--primary-dark);
+            box-shadow: 0 3px 12px rgba(0,0,0,.25);
+            cursor: pointer; z-index: 2;
+            display: none; align-items: center; justify-content: center;
+        }
+        .car-arrow:hover { background: var(--accent-gold); color: #FFF; }
+        .car-arrow:disabled { opacity: .35; cursor: default; background: rgba(255,255,255,.95); color: var(--primary-dark); }
+        .car-arrow.prev { left: -8px; }
+        .car-arrow.next { right: -8px; }
+        @media (hover: hover) and (min-width: 700px) { .car-arrow { display: flex; } }
+
+        .car-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .car-dot {
+            width: 9px; height: 9px; border-radius: 50%;
+            border: none; padding: 0; background: #CBD5E0; cursor: pointer;
+            transition: background .2s, transform .2s;
+        }
+        .car-dot.active { background: var(--accent-gold); transform: scale(1.3); }
+
+        /* ---------- Visor ampliado (lightbox) ---------- */
+        .lightbox {
+            position: fixed; inset: 0;
+            z-index: 10000;
+            background: rgba(10,18,26,.94);
+            display: flex; align-items: center; justify-content: center;
+            padding: calc(56px + var(--safe-top)) calc(12px + var(--safe-right)) calc(56px + var(--safe-bottom)) calc(12px + var(--safe-left));
+        }
+        .lightbox[hidden] { display: none; }
+        .lb-fig { margin: 0; max-width: 100%; max-height: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .lb-fig img { max-width: 100%; max-height: calc(100dvh - 140px); object-fit: contain; border-radius: 8px; user-select: none; -webkit-user-drag: none; }
+        .lb-count { color: #CBD5E0; font-size: .85rem; letter-spacing: 1px; }
+        .lb-btn {
+            position: absolute;
+            width: 44px; height: 44px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.25);
+            background: rgba(255,255,255,.12); color: #FFF;
+            font-size: 1.05rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lb-btn:hover { background: var(--accent-gold); }
+        .lb-close { top: calc(10px + var(--safe-top)); right: calc(12px + var(--safe-right)); }
+        .lb-prev { left: calc(10px + var(--safe-left)); top: 50%; transform: translateY(-50%); }
+        .lb-next { right: calc(10px + var(--safe-right)); top: 50%; transform: translateY(-50%); }
+        .lightbox.single .lb-prev, .lightbox.single .lb-next { display: none; }
+
+        /* ---------- Carta (Canva) ---------- */
+        .menu-frame {
+            width: 100%;
+            height: clamp(440px, 78dvh, 780px);
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            background: #F7FAFC;
+            display: block;
+        }
+        .hint { font-size: .8rem; color: #718096; margin-top: 10px; line-height: 1.5; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: .8rem;
+            color: #A0AEC0;
+            border-top: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+<body>
+
+    <script src="menu.js"></script>
+
+    <!-- Barra de secciones: aparece al desplazarse -->
+    <nav class="subnav" id="subnav" aria-label="Secciones">
+        <a href="#desayuno" data-section="desayuno"><i class="fa-solid fa-mug-hot"></i> <span data-i18n="tab_b">Desayuno</span></a>
+        <a href="#restaurante" data-section="restaurante"><i class="fa-solid fa-utensils"></i> <span data-i18n="tab_r">Restaurante</span></a>
+    </nav>
+
+    <div class="container">
+        <a href="servicios.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back">Volver a Servicios</span></a>
+
+        <div class="page-heading">
+            <h1 data-i18n="h1">Desayuno & Restaurante</h1>
+            <p data-i18n="lead">Los sabores auténticos de Mendoza, a su disposición durante toda su estadía.</p>
+        </div>
+
+        <!-- Índice inicial -->
+        <nav class="index-grid" id="index" aria-label="Índice">
+            <a class="index-card" href="#desayuno">
+                <span class="ic"><i class="fa-solid fa-mug-hot"></i></span>
+                <span class="it"><strong data-i18n="idx_b_t">Desayuno Buffet</strong><small data-i18n="idx_b_s">07:00 a 10:00 hs • 9º Piso</small></span>
+                <i class="fa-solid fa-chevron-down go"></i>
+            </a>
+            <a class="index-card" href="#restaurante">
+                <span class="ic"><i class="fa-solid fa-utensils"></i></span>
+                <span class="it"><strong data-i18n="idx_r_t">Restaurante & Bar</strong><small data-i18n="idx_r_s">Almuerzo y cena • Carta digital</small></span>
+                <i class="fa-solid fa-chevron-down go"></i>
+            </a>
+        </nav>
+
+        <!-- ============ DESAYUNO ============ -->
+        <section class="block" id="desayuno">
+            <h2 class="block-title"><i class="fa-solid fa-mug-hot"></i> <span data-i18n="b_title">Desayuno Buffet</span></h2>
+
+            <div class="section-card">
+                <h3 data-i18n="b_h3">Un despertar con sabor mendocino</h3>
+                <p class="desc-text" data-i18n="b_intro">Comience cada mañana de la mejor manera con una propuesta variada, fresca y pensada para todos los gustos. En nuestro desayuno buffet combinamos la calidez de la pastelería artesanal con opciones nutritivas, para que cargue energías antes de salir a disfrutar de la ciudad y sus caminos del vino.</p>
+
+                <h4 data-i18n="b_h4">¿Qué encontrará en nuestra mesa?</h4>
+                <ul class="feature-list">
+                    <li><span class="f-ic"><i class="fa-solid fa-bread-slice"></i></span><span data-i18n="b1"><strong>Panadería local y artesanal:</strong> Clásicas facturas recién horneadas, las infaltables <em>tortitas mendocinas</em> (pinchadas y raspadas) y una selección de galletas y panes variados.</span></li>
+                    <li><span class="f-ic"><i class="fa-solid fa-mug-hot"></i></span><span data-i18n="b2"><strong>Cafetería e infusiones:</strong> Café recién elaborado, leche, variedad de tés y bebidas calientes a elección.</span></li>
+                    <li><span class="f-ic"><i class="fa-solid fa-apple-whole"></i></span><span data-i18n="b3"><strong>Jugos y frutas:</strong> Jugos naturales de fruta y una selección de frutas de estación frescas, listas para disfrutar enteras o fileteadas.</span></li>
+                    <li><span class="f-ic"><i class="fa-solid fa-egg"></i></span><span data-i18n="b4"><strong>Opciones calientes:</strong> Huevos revueltos preparados en el momento, el acompañamiento ideal para un desayuno completo y proteico.</span></li>
+                    <li><span class="f-ic"><i class="fa-solid fa-cheese"></i></span><span data-i18n="b5"><strong>Para untar y acompañar:</strong> Mermeladas artesanales con frutos de la región, dulce de leche, manteca, quesos y fiambres seleccionados.</span></li>
+                </ul>
+            </div>
+
+            <div class="section-card">
+                <p class="desc-text" data-i18n="b_close">Todo el servicio es asistido por nuestro personal, para que usted disfrute con tranquilidad y con la atención que merece.</p>
+                <p class="desc-text" data-i18n="b_invite">Lo esperamos todas las mañanas, de 07:00 a 10:00 hs en el 9º piso, para comenzar su día con los sabores auténticos de Mendoza.</p>
+                <ul class="info-list" style="margin-top:16px;">
+                    <li><span data-i18n="l_time">Horario</span><span data-i18n="v_time">07:00 a 10:00 hs</span></li>
+                    <li><span data-i18n="l_place">Ubicación</span><span data-i18n="v_place">9º Piso</span></li>
+                    <li><span data-i18n="l_serv">Servicio</span><span data-i18n="v_serv">Buffet asistido por nuestro personal</span></li>
+                </ul>
+            </div>
+
+            <!-- Galería: carrusel con ampliación al tocar -->
+            <div class="gallery-head">
+                <h3 data-i18n="gal_t">Galería del desayuno</h3>
+                <small data-i18n="gal_hint">Deslice o use las flechas. Toque una foto para ampliarla.</small>
+            </div>
+            <div class="carousel" id="gallery">
+                <button type="button" class="car-arrow prev" data-i18n-attr="aria-label:aria_prev" aria-label="Foto anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="car-track" tabindex="0">
+                    <figure class="slide"><button type="button" class="slide-btn"><span class="ph"><i class="fa-regular fa-image"></i><small>desayuno1.jpg</small></span><img src="desayuno1.jpg" alt="Desayuno buffet, foto 1" loading="lazy" draggable="false"><span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button></figure>
+                    <figure class="slide"><button type="button" class="slide-btn"><span class="ph"><i class="fa-regular fa-image"></i><small>desayuno2.jpg</small></span><img src="desayuno2.jpg" alt="Desayuno buffet, foto 2" loading="lazy" draggable="false"><span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button></figure>
+                    <figure class="slide"><button type="button" class="slide-btn"><span class="ph"><i class="fa-regular fa-image"></i><small>desayuno3.jpg</small></span><img src="desayuno3.jpg" alt="Desayuno buffet, foto 3" loading="lazy" draggable="false"><span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button></figure>
+                    <figure class="slide"><button type="button" class="slide-btn"><span class="ph"><i class="fa-regular fa-image"></i><small>desayuno4.jpg</small></span><img src="desayuno4.jpg" alt="Desayuno buffet, foto 4" loading="lazy" draggable="false"><span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button></figure>
+                    <figure class="slide"><button type="button" class="slide-btn"><span class="ph"><i class="fa-regular fa-image"></i><small>desayuno5.jpg</small></span><img src="desayuno5.jpg" alt="Desayuno buffet, foto 5" loading="lazy" draggable="false"><span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button></figure>
+                    <figure class="slide"><button type="button" class="slide-btn"><span class="ph"><i class="fa-regular fa-image"></i><small>desayuno6.jpg</small></span><img src="desayuno6.jpg" alt="Desayuno buffet, foto 6" loading="lazy" draggable="false"><span class="zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button></figure>
+                </div>
+                <button type="button" class="car-arrow next" data-i18n-attr="aria-label:aria_next" aria-label="Foto siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="car-dots" id="car-dots"></div>
+            </div>
+        </section>
+
+        <!-- ============ RESTAURANTE ============ -->
+        <section class="block" id="restaurante">
+            <h2 class="block-title"><i class="fa-solid fa-utensils"></i> <span data-i18n="r_title">Restaurante & Bar</span></h2>
+
+            <div class="section-card">
+                <h3 data-i18n="r_h3">Cocina regional y vinos de Mendoza</h3>
+                <p class="desc-text" data-i18n="r_intro">Disfrute de la alta cocina regional y de los mejores vinos de Mendoza sin salir del hotel. Nuestra propuesta incluye servicio a la carta, picadas regionales y coctelería de autor.</p>
+                <ul class="info-list" style="margin-top:16px;">
+                    <li><span data-i18n="l_meal">Almuerzo / Cena</span><span data-i18n="v_meal">12:30 a 21:00 hs</span></li>
+                    <li><span data-i18n="l_room">Room Service</span><span data-i18n="v_room">Disponible hasta las 21:00 hs</span></li>
+                    <li><span data-i18n="l_prop">Propuesta</span><span data-i18n="v_prop">A la carta • Picadas regionales • Coctelería de autor</span></li>
+                </ul>
+            </div>
+
+            <div class="section-card" id="carta">
+                <h3 data-i18n="menu_t">Nuestra carta</h3>
+                <p class="desc-text" data-i18n="menu_p">Consulte nuestra carta digital a continuación.</p>
+                <iframe class="menu-frame" id="menu-frame" loading="lazy" allowfullscreen allow="fullscreen"
+                        data-i18n-attr="title:frame_t" title="Carta del Restaurante"
+                        src="https://www.canva.com/design/DAG-l3nInc8/1-eWpveQM906S4Q61fM_qg/view?embed"></iframe>
+                <p class="hint" data-i18n="menu_hint">Si la carta no se visualiza correctamente, ábrala en pantalla completa.</p>
+                <div class="card-actions">
+                    <a class="btn-action primary" href="https://www.canva.com/design/DAG-l3nInc8/1-eWpveQM906S4Q61fM_qg/view?utm_content=DAG-l3nInc8&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=he914f13fd4" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> <span data-i18n="menu_open">Abrir carta en pantalla completa</span></a>
+                    <a class="btn-action" href="tel:+5492612352727"><i class="fa-solid fa-phone"></i> <span data-i18n="call">Llamar a Recepción</span></a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        Hotel Agua del Corral © 2026 • Amigorena 36, Mendoza, Argentina
+    </footer>
+
+    <!-- Visor ampliado -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" hidden>
+        <button type="button" class="lb-btn lb-close" id="lb-close" data-i18n-attr="aria-label:aria_close" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="lb-btn lb-prev" id="lb-prev" data-i18n-attr="aria-label:aria_prev" aria-label="Foto anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <figure class="lb-fig">
+            <img id="lb-img" alt="" draggable="false">
+            <figcaption class="lb-count" id="lb-count"></figcaption>
+        </figure>
+        <button type="button" class="lb-btn lb-next" id="lb-next" data-i18n-attr="aria-label:aria_next" aria-label="Foto siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        /* ---------------- Traducciones (el español sale del propio HTML) ---------------- */
+        var DICT = {
+            es: {
+                alt_photo: 'Desayuno buffet, foto',
+                aria_zoom: 'Ampliar foto'
+            },
+            en: {
+                alt_photo: 'Buffet breakfast, photo',
+                aria_zoom: 'Enlarge photo',
+                aria_prev: 'Previous photo', aria_next: 'Next photo', aria_close: 'Close',
+                frame_t: 'Restaurant menu',
+                title: 'Breakfast & Restaurant - Hotel Agua del Corral',
+                back: 'Back to Services',
+                h1: 'Breakfast & Restaurant',
+                lead: 'The authentic flavors of Mendoza, at your disposal throughout your stay.',
+                idx_b_t: 'Buffet Breakfast', idx_b_s: '07:00 to 10:00 • 9th Floor',
+                idx_r_t: 'Restaurant & Bar', idx_r_s: 'Lunch and dinner • Digital menu',
+                tab_b: 'Breakfast', tab_r: 'Restaurant',
+                b_title: 'Buffet Breakfast',
+                b_h3: 'A Mendoza-style awakening',
+                b_intro: 'Begin each morning in the best possible way with a varied, fresh selection designed for every taste. Our breakfast buffet combines the warmth of artisan baking with nutritious options, so that you may gather your energy before setting out to enjoy the city and its wine routes.',
+                b_h4: 'What will you find at our table?',
+                b1: '<strong>Local, artisan bakery:</strong> Classic freshly baked pastries, the indispensable <em>tortitas mendocinas</em> (pinchadas and raspadas) and a selection of crackers and assorted breads.',
+                b2: '<strong>Coffee and hot drinks:</strong> Freshly brewed coffee, milk, a variety of teas and hot beverages of your choice.',
+                b3: '<strong>Juices and fruit:</strong> Natural fruit juices and a selection of fresh seasonal fruit, ready to enjoy whole or sliced.',
+                b4: '<strong>Hot options:</strong> Scrambled eggs prepared to order, the ideal complement to a complete, protein-rich breakfast.',
+                b5: '<strong>Spreads and accompaniments:</strong> Artisan jams made with regional fruit, dulce de leche, butter, and a selection of cheeses and cold cuts.',
+                b_close: 'The entire service is attended by our staff, so that you may relax and enjoy the attention you deserve.',
+                b_invite: 'We look forward to welcoming you every morning, from 07:00 to 10:00 on the 9th floor, to begin your day with the authentic flavors of Mendoza.',
+                l_time: 'Hours', v_time: '07:00 to 10:00',
+                l_place: 'Location', v_place: '9th Floor',
+                l_serv: 'Service', v_serv: 'Buffet, attended by our staff',
+                gal_t: 'Breakfast gallery', gal_hint: 'Swipe or use the arrows. Tap a photo to enlarge it.',
+                r_title: 'Restaurant & Bar',
+                r_h3: 'Regional cuisine and Mendoza wines',
+                r_intro: 'Enjoy fine regional cuisine and the best wines of Mendoza without leaving the hotel. Our offering includes à la carte service, regional charcuterie platters and signature cocktails.',
+                l_meal: 'Lunch / Dinner', v_meal: '12:30 to 21:00',
+                l_room: 'Room Service', v_room: 'Available until 21:00',
+                l_prop: 'Offering', v_prop: 'À la carte • Regional platters • Signature cocktails',
+                menu_t: 'Our menu', menu_p: 'Please browse our digital menu below.',
+                menu_hint: 'If the menu does not display correctly, please open it full screen.',
+                menu_open: 'Open menu full screen', call: 'Call Reception'
+            },
+            pt: {
+                alt_photo: 'Café da manhã buffet, foto',
+                aria_zoom: 'Ampliar foto',
+                aria_prev: 'Foto anterior', aria_next: 'Próxima foto', aria_close: 'Fechar',
+                frame_t: 'Cardápio do restaurante',
+                title: 'Café da Manhã e Restaurante - Hotel Agua del Corral',
+                back: 'Voltar aos Serviços',
+                h1: 'Café da Manhã & Restaurante',
+                lead: 'Os sabores autênticos de Mendoza, à sua disposição durante toda a sua estadia.',
+                idx_b_t: 'Café da Manhã Buffet', idx_b_s: '07:00 às 10:00 • 9º Andar',
+                idx_r_t: 'Restaurante & Bar', idx_r_s: 'Almoço e jantar • Cardápio digital',
+                tab_b: 'Café da manhã', tab_r: 'Restaurante',
+                b_title: 'Café da Manhã Buffet',
+                b_h3: 'Um despertar com sabor mendocino',
+                b_intro: 'Comece cada manhã da melhor maneira, com uma proposta variada, fresca e pensada para todos os gostos. Em nosso café da manhã buffet combinamos o calor da confeitaria artesanal com opções nutritivas, para recarregar as energias antes de sair para desfrutar da cidade e de seus caminhos do vinho.',
+                b_h4: 'O que encontrará em nossa mesa?',
+                b1: '<strong>Padaria local e artesanal:</strong> Clássicos folhados e doces recém-assados, as imperdíveis <em>tortitas mendocinas</em> (pinchadas e raspadas) e uma seleção de biscoitos e pães variados.',
+                b2: '<strong>Cafeteria e infusões:</strong> Café recém-preparado, leite, variedade de chás e bebidas quentes à escolha.',
+                b3: '<strong>Sucos e frutas:</strong> Sucos naturais de frutas e uma seleção de frutas frescas da estação, prontas para saborear inteiras ou fatiadas.',
+                b4: '<strong>Opções quentes:</strong> Ovos mexidos preparados na hora, o acompanhamento ideal para um café da manhã completo e rico em proteínas.',
+                b5: '<strong>Para passar e acompanhar:</strong> Geleias artesanais com frutas da região, doce de leite, manteiga, queijos e frios selecionados.',
+                b_close: 'Todo o serviço é assistido por nossa equipe, para que desfrute com tranquilidade e com a atenção que merece.',
+                b_invite: 'Aguardamos a sua visita todas as manhãs, das 07:00 às 10:00, no 9º andar, para começar o dia com os sabores autênticos de Mendoza.',
+                l_time: 'Horário', v_time: '07:00 às 10:00',
+                l_place: 'Local', v_place: '9º Andar',
+                l_serv: 'Serviço', v_serv: 'Buffet assistido por nossa equipe',
+                gal_t: 'Galeria do café da manhã', gal_hint: 'Deslize ou use as setas. Toque em uma foto para ampliá-la.',
+                r_title: 'Restaurante & Bar',
+                r_h3: 'Cozinha regional e vinhos de Mendoza',
+                r_intro: 'Desfrute da alta cozinha regional e dos melhores vinhos de Mendoza sem sair do hotel. Nossa proposta inclui serviço à la carte, tábuas regionais e coquetelaria de autor.',
+                l_meal: 'Almoço / Jantar', v_meal: '12:30 às 21:00',
+                l_room: 'Room Service', v_room: 'Disponível até às 21:00',
+                l_prop: 'Proposta', v_prop: 'À la carte • Tábuas regionais • Coquetelaria de autor',
+                menu_t: 'Nosso cardápio', menu_p: 'Consulte nosso cardápio digital a seguir.',
+                menu_hint: 'Se o cardápio não for exibido corretamente, abra-o em tela cheia.',
+                menu_open: 'Abrir cardápio em tela cheia', call: 'Ligar para a Recepção'
+            }
+        };
+        AGC.i18n(DICT);
+
+        function $(s, r) { return (r || document).querySelector(s); }
+        function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+        /* ---------------- Carrusel ---------------- */
+        var track = $('.car-track'),
+            slides = $$('.slide', track),
+            prevBtn = $('.car-arrow.prev'),
+            nextBtn = $('.car-arrow.next'),
+            dotsBox = $('#car-dots'),
+            dots = [];
+
+        slides.forEach(function (sl, i) {
+            var img = $('img', sl);
+            function broken() { sl.classList.add('broken'); img.style.display = 'none'; }
+            img.addEventListener('error', broken);
+
+            var d = document.createElement('button');
+            d.type = 'button';
+            d.className = 'car-dot';
+            d.addEventListener('click', function () { track.scrollTo({ left: i * stepSize(), behavior: 'smooth' }); });
+            dotsBox.appendChild(d);
+            dots.push(d);
+        });
+
+        function stepSize() {
+            var cs = getComputedStyle(track);
+            var gap = parseFloat(cs.columnGap || cs.gap) || 12;
+            return slides[0].getBoundingClientRect().width + gap;
+        }
+        function maxScroll() { return track.scrollWidth - track.clientWidth; }
+        function currentIndex() {
+            if (track.scrollLeft >= maxScroll() - 2) return slides.length - 1;
+            return Math.round(track.scrollLeft / stepSize());
+        }
+        var ticking = false;
+        function updateCarousel() {
+            ticking = false;
+            var idx = currentIndex();
+            dots.forEach(function (d, i) { d.classList.toggle('active', i === idx); });
+            prevBtn.disabled = track.scrollLeft <= 2;
+            nextBtn.disabled = track.scrollLeft >= maxScroll() - 2;
+        }
+        track.addEventListener('scroll', function () {
+            if (!ticking) { ticking = true; requestAnimationFrame(updateCarousel); }
+        }, { passive: true });
+        window.addEventListener('resize', updateCarousel);
+        prevBtn.addEventListener('click', function () { track.scrollBy({ left: -stepSize(), behavior: 'smooth' }); });
+        nextBtn.addEventListener('click', function () { track.scrollBy({ left: stepSize(), behavior: 'smooth' }); });
+
+        /* Textos accesibles que dependen del idioma */
+        AGC.onLang(function () {
+            slides.forEach(function (sl, i) {
+                $('img', sl).alt = AGC.t('alt_photo') + ' ' + (i + 1);
+                $('.slide-btn', sl).setAttribute('aria-label', AGC.t('aria_zoom') + ' ' + (i + 1));
+            });
+            dots.forEach(function (d, i) { d.setAttribute('aria-label', (i + 1) + ' / ' + dots.length); });
+            updateCarousel();
+        });
+
+        /* ---------------- Visor ampliado ---------------- */
+        var lb = $('#lightbox'), lbImg = $('#lb-img'), lbCount = $('#lb-count'),
+            list = [], pos = 0, lastFocus = null, touchX = null;
+
+        function isOk(sl) {
+            var img = $('img', sl);
+            return !sl.classList.contains('broken') && img.complete && img.naturalWidth > 0;
+        }
+        function render() {
+            var img = $('img', list[pos]);
+            lbImg.src = img.currentSrc || img.src;
+            lbImg.alt = img.alt;
+            lbCount.textContent = (pos + 1) + ' / ' + list.length;
+        }
+        function openLb(slide) {
+            list = slides.filter(isOk);
+            pos = list.indexOf(slide);
+            if (pos < 0) return;
+            lastFocus = document.activeElement;
+            lb.classList.toggle('single', list.length < 2);
+            lb.hidden = false;
+            document.body.style.overflow = 'hidden';
+            render();
+            $('#lb-close').focus();
+        }
+        function closeLb() {
+            if (lb.hidden) return;
+            lb.hidden = true;
+            lbImg.removeAttribute('src');
+            document.body.style.overflow = '';
+            if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+        function go(d) {
+            if (list.length < 2) return;
+            pos = (pos + d + list.length) % list.length;
+            render();
+        }
+
+        slides.forEach(function (sl) {
+            $('.slide-btn', sl).addEventListener('click', function () { openLb(sl); });
+        });
+        $('#lb-close').addEventListener('click', closeLb);
+        $('#lb-prev').addEventListener('click', function (e) { e.stopPropagation(); go(-1); });
+        $('#lb-next').addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+        lb.addEventListener('click', function (e) { if (e.target === lb || e.target.classList.contains('lb-fig')) closeLb(); });
+        document.addEventListener('keydown', function (e) {
+            if (lb.hidden) return;
+            if (e.key === 'Escape') closeLb();
+            else if (e.key === 'ArrowLeft') go(-1);
+            else if (e.key === 'ArrowRight') go(1);
+        });
+        lb.addEventListener('touchstart', function (e) { touchX = e.changedTouches[0].clientX; }, { passive: true });
+        lb.addEventListener('touchend', function (e) {
+            if (touchX === null) return;
+            var dx = e.changedTouches[0].clientX - touchX;
+            touchX = null;
+            if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+        }, { passive: true });
+
+        /* ---------------- Barra de secciones y sección activa ---------------- */
+        var subnav = $('#subnav'), indexEl = $('#index'),
+            navLinks = $$('a', subnav),
+            sections = ['desayuno', 'restaurante'].map(function (id) { return document.getElementById(id); });
+
+        function headerH() {
+            return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--agc-header-h')) || 64;
+        }
+        var spyTicking = false;
+        function spy() {
+            spyTicking = false;
+            var hh = headerH();
+            subnav.classList.toggle('show', indexEl.getBoundingClientRect().bottom < hh + 8);
+            var active = null;
+            sections.forEach(function (s) {
+                if (s.getBoundingClientRect().top <= hh + 120) active = s.id;
+            });
+            navLinks.forEach(function (a) {
+                var on = a.getAttribute('data-section') === active;
+                a.classList.toggle('active', on);
+                if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+            });
+        }
+        window.addEventListener('scroll', function () {
+            if (!spyTicking) { spyTicking = true; requestAnimationFrame(spy); }
+        }, { passive: true });
+        window.addEventListener('resize', spy);
+        spy();
+    })();
+    </script>
+</body>
+</html>
